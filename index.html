@@ -1,0 +1,1818 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#F7F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17161A" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Zuzugue">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="Controle simples dos gastos mensais com os filhos.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icone-180.png">
+<link rel="icon" type="image/png" href="icone-192.png">
+<style>*{margin:0}html{-webkit-text-size-adjust:100%}</style>
+<title>Zuzugue APP</title>
+
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --bg-card: #FFFFFF;
+    --bg-soft: #EFEAE2;
+    --ink: #2A2724;
+    --ink-2: #6B645C;
+    --ink-3: #9C948A;
+    --line: #E3DCD2;
+    --brand: #6B4E9E;
+    --pri-ink: #FFFFFF;
+    --brand-soft: #EFE7FB;
+    --ok: #2E7D5B;
+    --warn: #B4681A;
+    --warn-soft: #FDF1E0;
+    --danger: #B3352F;
+    --danger-soft: #FBECEB;
+    --c1: #2F6FB5;
+    --c2: #C4457F;
+    --c3: #7A6A57;
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(42,39,36,.06), 0 6px 20px rgba(42,39,36,.06);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17161A; --bg-card: #211F25; --bg-soft: #2B2831; --ink: #F0ECE6;
+      --ink-2: #B4ADA4; --ink-3: #837C74; --line: #35313B; --brand: #B79BE8;
+      --pri-ink: #1B1524; --brand-soft: #2E2740; --ok: #6FD3A2; --warn: #E8A35C; --warn-soft: #382C1C;
+      --danger: #F08A84; --danger-soft: #3A2221; --c1: #74AEF0; --c2: #F183B6; --c3: #C5B49A;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17161A; --bg-card: #211F25; --bg-soft: #2B2831; --ink: #F0ECE6;
+    --ink-2: #B4ADA4; --ink-3: #837C74; --line: #35313B; --brand: #B79BE8;
+    --pri-ink: #1B1524; --brand-soft: #2E2740; --ok: #6FD3A2; --warn: #E8A35C; --warn-soft: #382C1C;
+    --danger: #F08A84; --danger-soft: #3A2221; --c1: #74AEF0; --c2: #F183B6; --c3: #C5B49A;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25);
+  }
+  :root[data-theme="light"] {
+    --bg: #F7F4EF; --bg-card: #FFFFFF; --bg-soft: #EFEAE2; --ink: #2A2724;
+    --ink-2: #6B645C; --ink-3: #9C948A; --line: #E3DCD2; --brand: #6B4E9E;
+    --pri-ink: #FFFFFF; --brand-soft: #EFE7FB; --ok: #2E7D5B; --warn: #B4681A; --warn-soft: #FDF1E0;
+    --danger: #B3352F; --danger-soft: #FBECEB; --c1: #2F6FB5; --c2: #C4457F; --c3: #7A6A57;
+    --shadow: 0 1px 2px rgba(42,39,36,.06), 0 6px 20px rgba(42,39,36,.06);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px; line-height: 1.45;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; border: 0; background: none; -webkit-appearance: none; appearance: none; }
+  input, textarea, select { -webkit-appearance: none; appearance: none; }
+
+  .wrap { max-width: 620px; margin: 0 auto; padding: 0 14px calc(150px + var(--safe-b)); }
+
+  /* ---------- topo ---------- */
+  .topbar { position: sticky; top: 0; z-index: 40; background: var(--bg); padding: calc(10px + var(--safe-t)) 0 8px; border-bottom: 1px solid var(--line); }
+  .brandrow { display: flex; align-items: center; gap: 10px; }
+  .logo { width: 34px; height: 34px; border-radius: 11px; flex: 0 0 auto; background: linear-gradient(140deg, var(--brand), var(--c2)); color: #fff; display: grid; place-items: center; font-size: 17px; }
+  .brandtxt h1 { margin: 0; font-size: 17px; letter-spacing: -.2px; }
+  .brandtxt p { margin: 0; font-size: 11.5px; color: var(--ink-3); }
+  .iconbtn { margin-left: auto; width: 36px; height: 36px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--line); display: grid; place-items: center; font-size: 16px; }
+
+  .monthnav { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .monthnav button.nav { width: 38px; height: 38px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--line); font-size: 17px; color: var(--ink-2); }
+  .monthnav .mlabel { flex: 1; text-align: center; background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; height: 38px; display: grid; place-items: center; font-weight: 650; font-size: 15px; letter-spacing: -.2px; }
+  .monthnav .mlabel small { font-weight: 500; color: var(--ink-3); }
+
+  /* ---------- cartões ---------- */
+  .card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; margin-top: 12px; }
+  .card h2 { margin: 0 0 2px; font-size: 14px; letter-spacing: -.1px; }
+  .card .sub { margin: 0 0 10px; font-size: 12px; color: var(--ink-3); }
+
+  .total-hero { text-align: center; padding: 18px 14px 16px; }
+  .total-hero .lbl { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .6px; }
+  .total-hero .val { font-size: 34px; font-weight: 700; letter-spacing: -1px; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+  .total-hero .cmp { font-size: 12.5px; color: var(--ink-2); margin-top: 4px; }
+
+  .frase { background: var(--brand-soft); color: var(--brand); border-radius: 14px; padding: 11px 13px; font-size: 13.5px; font-weight: 600; margin-top: 12px; line-height: 1.4; }
+
+  .kids { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .kid { border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; background: var(--bg-card); box-shadow: var(--shadow); }
+  .kid .nm { font-size: 12.5px; font-weight: 650; display: flex; align-items: center; gap: 6px; }
+  .kid .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+  .kid .vl { font-size: 19px; font-weight: 700; letter-spacing: -.5px; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .kid .pc { font-size: 11.5px; color: var(--ink-3); }
+
+  /* ---------- listas ---------- */
+  .lanc { display: flex; align-items: flex-start; gap: 10px; padding: 11px 2px; border-bottom: 1px solid var(--line); width: 100%; text-align: left; }
+  .lanc:last-child { border-bottom: 0; }
+  .lanc .ico { width: 34px; height: 34px; border-radius: 11px; background: var(--bg-soft); display: grid; place-items: center; font-size: 16px; flex: 0 0 auto; }
+  .lanc .mid { flex: 1; min-width: 0; }
+  .lanc .d1 { font-size: 14.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+  .lanc .d2 { font-size: 11.5px; color: var(--ink-3); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 1px; }
+  .lanc .vl { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill { font-size: 10.5px; padding: 1px 7px; border-radius: 999px; background: var(--bg-soft); color: var(--ink-2); font-weight: 600; }
+  .pill.k1 { background: color-mix(in srgb, var(--c1) 15%, transparent); color: var(--c1); }
+  .pill.k2 { background: color-mix(in srgb, var(--c2) 15%, transparent); color: var(--c2); }
+  .pill.k3 { background: color-mix(in srgb, var(--c3) 18%, transparent); color: var(--c3); }
+  .pill.fix { background: var(--brand-soft); color: var(--brand); }
+
+  .daygroup .dh { display: flex; justify-content: space-between; align-items: baseline; font-size: 11.5px; color: var(--ink-3); padding: 9px 2px 2px; font-weight: 600; }
+  .empty { text-align: center; padding: 26px 16px; color: var(--ink-3); font-size: 13.5px; }
+  .empty .big { font-size: 30px; display: block; margin-bottom: 6px; }
+
+  /* ---------- barras ---------- */
+  .bar { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; margin-top: 11px; }
+  .bar .bl { font-size: 13px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar .bv { font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .bar .track { grid-column: 1 / -1; height: 8px; border-radius: 99px; background: var(--bg-soft); overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 99px; background: var(--brand); }
+  .bar .nota { grid-column: 1 / -1; font-size: 11px; color: var(--ink-3); }
+
+  .cols { display: flex; align-items: flex-end; gap: 5px; height: 110px; margin-top: 10px; }
+  .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; height: 100%; }
+  .col .cb { width: 100%; border-radius: 6px 6px 3px 3px; background: var(--brand); min-height: 2px; opacity: .8; }
+  .col.cur .cb { background: var(--c2); opacity: 1; }
+  .col .cl { font-size: 9.5px; color: var(--ink-3); }
+
+  /* ---------- chips ---------- */
+  .chips { display: flex; gap: 7px; overflow-x: auto; margin: 0 -14px; padding: 2px 14px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex: 0 0 auto; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-card); font-size: 13px; font-weight: 550; color: var(--ink-2); white-space: nowrap; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* ---------- botões ---------- */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 12px 16px; border-radius: 13px; font-size: 15px; font-weight: 650; background: var(--bg-soft); color: var(--ink); border: 1px solid var(--line); width: 100%; }
+  .btn.pri { background: var(--brand); color: var(--pri-ink); border-color: transparent; }
+  .btn.pri[disabled] { opacity: .45; }
+  .btn.ghost { background: transparent; }
+  .btn.dan { color: var(--danger); }
+  .btn.sm { padding: 9px 12px; font-size: 13.5px; border-radius: 11px; width: auto; }
+  .btnrow { display: flex; gap: 8px; margin-top: 10px; }
+
+  .fab { position: fixed; z-index: 45; right: max(14px, calc((100vw - 620px) / 2 + 14px)); bottom: calc(72px + var(--safe-b) + 12px); height: 54px; padding: 0 20px; border-radius: 18px; background: var(--brand); color: var(--pri-ink); font-size: 15.5px; font-weight: 700; box-shadow: 0 8px 24px rgba(107,78,158,.4); display: inline-flex; align-items: center; gap: 8px; }
+
+  /* ---------- nav ---------- */
+  .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 6px 0 calc(6px + var(--safe-b)); }
+  .tabbar .inner { max-width: 620px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0; color: var(--ink-3); font-size: 10.5px; font-weight: 600; }
+  .tab .ti { font-size: 19px; line-height: 1; }
+  .tab[aria-current="true"] { color: var(--brand); }
+
+  /* ---------- folha ---------- */
+  .sheet-bg { position: fixed; inset: 0; z-index: 60; background: rgba(20,18,16,.45); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .18s; }
+  .sheet-bg.on { opacity: 1; pointer-events: auto; }
+  .sheet { background: var(--bg); width: 100%; max-width: 620px; max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 8px 14px calc(24px + var(--safe-b)); transform: translateY(24px); transition: transform .2s; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .sheet-bg.on .sheet { transform: none; }
+  .grab { width: 38px; height: 4px; border-radius: 99px; background: var(--line); margin: 6px auto 10px; }
+  .sheet h2 { margin: 0 0 4px; font-size: 17px; }
+
+  label.f { display: block; margin-top: 13px; }
+  label.f > span { display: block; font-size: 12px; font-weight: 650; color: var(--ink-2); margin-bottom: 5px; }
+  .inp { width: 100%; padding: 12px 13px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-card); color: var(--ink); font-size: 16px; }
+  .inp:focus { outline: 2px solid var(--brand); outline-offset: -1px; }
+  textarea.inp { min-height: 60px; resize: vertical; }
+  input[type="date"].inp { min-height: 46px; }
+
+  .money { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--bg-card); border-radius: 14px; padding: 12px 14px; }
+  .money:focus-within { outline: 2px solid var(--brand); outline-offset: -1px; }
+  .money .cur { font-size: 17px; font-weight: 650; color: var(--ink-3); }
+  .money input { flex: 1; border: 0; background: transparent; font-size: 32px; font-weight: 700; letter-spacing: -.8px; padding: 0; width: 100%; font-variant-numeric: tabular-nums; }
+  .money input:focus { outline: none; }
+
+  .seg { display: flex; gap: 6px; margin-top: 6px; }
+  .seg button { flex: 1; padding: 11px 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-card); font-size: 13.5px; font-weight: 600; color: var(--ink-2); display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .seg button[aria-pressed="true"] { border-width: 2px; }
+  .seg button .em { font-size: 16px; }
+  .seg.mini button { flex-direction: row; gap: 5px; padding: 9px 4px; font-size: 13px; }
+
+  .catgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 6px; }
+  .catbtn { padding: 10px 5px; border-radius: 13px; border: 1px solid var(--line); background: var(--bg-card); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; color: var(--ink-2); line-height: 1.15; text-align: center; min-height: 64px; justify-content: center; }
+  .catbtn .em { font-size: 19px; }
+  .catbtn[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
+
+  .sugs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .sug { padding: 7px 11px; border-radius: 999px; border: 1px dashed var(--line); background: transparent; font-size: 12.5px; color: var(--ink-2); text-align: left; }
+  .sug[aria-pressed="true"] { background: var(--brand-soft); border-style: solid; border-color: var(--brand); color: var(--brand); }
+
+  .toast { position: fixed; left: 50%; bottom: calc(146px + var(--safe-b)); transform: translate(-50%, 12px); background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 12px; font-size: 13.5px; font-weight: 600; z-index: 80; opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; max-width: 92vw; display: flex; align-items: center; gap: 12px; }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .toast button { color: var(--bg); text-decoration: underline; font-weight: 700; font-size: 13.5px; white-space: nowrap; }
+
+  .aviso { border-radius: 14px; padding: 11px 13px; font-size: 12.5px; display: flex; gap: 9px; align-items: flex-start; margin-top: 12px; border: 1px solid; line-height: 1.4; }
+  .aviso.w { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 35%, transparent); color: var(--warn); }
+  .aviso.i { background: var(--brand-soft); border-color: color-mix(in srgb, var(--brand) 30%, transparent); color: var(--brand); }
+  .aviso.d { background: var(--danger-soft); border-color: color-mix(in srgb, var(--danger) 35%, transparent); color: var(--danger); }
+  .aviso b { display: block; }
+  .aviso button { text-decoration: underline; font-weight: 700; font-size: 12.5px; color: inherit; padding: 0; margin-top: 3px; }
+  .aviso .x { margin-left: auto; text-decoration: none; font-size: 15px; opacity: .6; }
+
+  .check { display: flex; align-items: center; gap: 10px; padding: 11px 2px; border-bottom: 1px solid var(--line); width: 100%; text-align: left; }
+  .check:last-of-type { border-bottom: 0; }
+  .check .bx { width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--line); flex: 0 0 auto; display: grid; place-items: center; font-size: 13px; color: transparent; }
+  .check.done .bx { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .check .tx { flex: 1; font-size: 14px; }
+  .check.done .tx { color: var(--ink-3); }
+  .check .vv { font-size: 12.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  details > summary { cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+
+  /* quem navega pelo teclado precisa ver onde está */
+  button:focus-visible, .chip:focus-visible, .sug:focus-visible, .tab:focus-visible,
+  .catbtn:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 12px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+  .hide { display: none !important; }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; }
+  .muted { color: var(--ink-3); font-size: 12.5px; }
+  .center { text-align: center; }
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brandrow">
+      <div class="logo">🧮</div>
+      <div class="brandtxt">
+        <h1>Zuzugue APP</h1>
+        <p id="subtitulo">gastos dos filhos</p>
+      </div>
+      <button class="iconbtn" id="btn-tema" aria-label="Mudar tema">◐</button>
+    </div>
+    <div class="monthnav" id="monthnav">
+      <button class="nav" id="mes-ant" aria-label="Mês anterior">‹</button>
+      <button class="mlabel" id="mes-label">—</button>
+      <button class="nav" id="mes-prox" aria-label="Próximo mês">›</button>
+    </div>
+  </div>
+
+  <main id="view"></main>
+</div>
+
+<button class="fab" id="fab">＋ Gasto</button>
+
+<nav class="tabbar">
+  <div class="inner">
+    <button class="tab" data-tab="mes"><span class="ti">🧾</span>Mês</button>
+    <button class="tab" data-tab="resumo"><span class="ti">📊</span>Resumo</button>
+    <button class="tab" data-tab="lembretes"><span class="ti">💡</span>Lembretes</button>
+    <button class="tab" data-tab="ajustes"><span class="ti">⚙️</span>Cópia</button>
+  </div>
+</nav>
+
+<div class="sheet-bg" id="sheet-bg"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ==========================================================================
+   ZUZUGUE APP — controle dos gastos com os filhos
+   Arquivo único · offline · sem conta · dados só neste aparelho.
+   ========================================================================== */
+
+const VERSAO = "1.0";
+const K = { atual: "zuzugue.v1.atual", ant: "zuzugue.v1.anterior", novo: "zuzugue.v1.novo", pre: "zuzugue.v1.pre_import", teste: "zuzugue.v1.teste" };
+
+/* ---------- utilidades ---------- */
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+const el = (t, cls, txt) => { const n = document.createElement(t); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+const limpa = (s) => String(s).replace(/ /g, " ").replace(/−/g, "-");   /* Intl usa espaço e menos especiais */
+
+/* dinheiro sempre em centavos inteiros — nada de float */
+const brl = (c) => limpa((Math.round(c) / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }));
+const brlSec = (c) => limpa((Math.round(c) / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+/* datas: a verdade é a string AAAA-MM-DD, montada na mão (toISOString muda o dia por causa do fuso) */
+function hojeISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function isoDeData(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function dataDeISO(iso) { const p = String(iso).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function somaDias(iso, n) { const d = dataDeISO(iso); d.setDate(d.getDate() + n); return isoDeData(d); }
+const dataBR = (iso) => { const p = String(iso).split("-"); return `${p[2]}/${p[1]}/${p[0]}`; };
+const agora = () => { const d = new Date(); return isoDeData(d) + "T" + [d.getHours(), d.getMinutes(), d.getSeconds()].map(x => String(x).padStart(2, "0")).join(":"); };
+const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+const MESES_C = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+const DIAS_SEM = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+const mesDe = (iso) => String(iso).slice(0, 7);
+const nomeMes = (mk) => `${MESES[+mk.slice(5, 7) - 1]} de ${mk.slice(0, 4)}`;
+const mesCurto = (mk) => MESES[+mk.slice(5, 7) - 1];
+const mesHoje = () => hojeISO().slice(0, 7);
+function somaMes(mk, n) { let a = +mk.slice(0, 4), m = +mk.slice(5, 7) - 1 + n; a += Math.floor(m / 12); m = ((m % 12) + 12) % 12; return `${a}-${String(m + 1).padStart(2, "0")}`; }
+const diaSemana = (iso) => DIAS_SEM[dataDeISO(iso).getDay()];
+const diasEntre = (a, b) => Math.round((dataDeISO(b) - dataDeISO(a)) / 86400000);
+const diasNoMes = (mk) => new Date(+mk.slice(0, 4), +mk.slice(5, 7), 0).getDate();
+
+/* ==========================================================================
+   CATÁLOGO DE GASTOS — o coração dos lembretes
+   ========================================================================== */
+const CATEGORIAS = [
+  { id: "escola", em: "🎒", nome: "Escola",
+    fixos: ["Mensalidade da escola", "Cantina da escola", "Apostila do colégio", "Transporte escolar"],
+    eventuais: ["Taxa de matrícula", "Lista de material", "Mochila nova", "Estojo e lancheira", "Excursão da escola", "Livro paradidático", "Foto da escola", "Formatura", "Festa junina da escola", "Rifa da escola", "Impressão de trabalho", "Uniforme da escola"] },
+  { id: "saude", em: "🩺", nome: "Saúde",
+    fixos: ["Plano de saúde", "Remédio contínuo", "Vitaminas"],
+    eventuais: ["Consulta do pediatra", "Farmácia / remédio", "Exame de sangue", "Vacina particular", "Pronto-socorro", "Consulta de especialista", "Raio-x / ultrassom", "Coparticipação do plano", "Curativo e termômetro"] },
+  { id: "dentista", em: "🦷", nome: "Dentista e óculos",
+    fixos: ["Manutenção do aparelho", "Plano odontológico"],
+    eventuais: ["Consulta no dentista", "Colocar o aparelho", "Limpeza e flúor", "Restauração", "Extração de dente", "Consulta do oftalmo", "Óculos novo", "Troca de lente", "Consertar a armação", "Contenção / placa"] },
+  { id: "terapias", em: "🧩", nome: "Terapias e apoio",
+    fixos: ["Psicóloga", "Fonoaudióloga", "Terapia ocupacional", "Psicopedagoga", "Nutricionista"],
+    eventuais: ["Consulta do psiquiatra", "Avaliação neuropsicológica", "Laudo e relatório", "Sessão extra", "Material da terapia", "Fisioterapia", "Acompanhante terapêutico"] },
+  { id: "alimentacao", em: "🍎", nome: "Alimentação",
+    fixos: ["Mercado das crianças", "Leite e iogurte", "Lanche da escola", "Fruta e suco", "Fórmula infantil", "Fralda descartável"],
+    eventuais: ["Delivery / iFood", "Restaurante em família", "Sorvete / açaí", "Pizza do fim de semana", "Bolo e doces", "Lanche do passeio", "Papinha e potinho", "Suplemento indicado"] },
+  { id: "roupas", em: "👟", nome: "Roupas e calçados",
+    fixos: ["Parcela da loja"],
+    eventuais: ["Tênis novo", "Roupa nova", "Casaco de inverno", "Pijama", "Chinelo e sandália", "Meia e roupa íntima", "Roupa de banho", "Sapato social", "Roupa de festa", "Ajuste de bainha"] },
+  { id: "transporte", em: "🚌", nome: "Transporte",
+    fixos: ["Van escolar", "Gasolina de levar e buscar", "Passe do ônibus"],
+    eventuais: ["Uber pontual", "Passagem de ônibus", "Passagem de avião", "Pedágio do passeio", "Estacionamento", "Táxi de emergência", "Carona paga"] },
+  { id: "esportes", em: "⚽", nome: "Esportes",
+    fixos: ["Natação", "Escolinha de futebol", "Aula de balé", "Judô / caratê", "Academia"],
+    eventuais: ["Kimono novo", "Chuteira", "Sapatilha de balé", "Uniforme do time", "Taxa da federação", "Inscrição de campeonato", "Viagem do campeonato", "Figurino do espetáculo", "Exame médico do esporte"] },
+  { id: "cursos", em: "🎹", nome: "Cursos e idiomas",
+    fixos: ["Mensalidade do inglês", "Aula de música", "Professor particular", "Curso de robótica", "Plataforma de estudos"],
+    eventuais: ["Material do inglês", "Matrícula do curso", "Prova de proficiência", "Instrumento musical", "Apostila do curso", "Recital / apresentação", "Curso de férias", "Intercâmbio"] },
+  { id: "lazer", em: "🎡", nome: "Lazer e passeios",
+    fixos: ["Streaming da família", "Robux / passe de jogo", "Mensalidade do clube"],
+    eventuais: ["Cinema", "Parque de diversões", "Museu / zoológico", "Fliperama do shopping", "Brinquedo novo", "Jogo de videogame", "Livro e gibi", "Viagem de férias", "Show infantil", "Colônia de férias"] },
+  { id: "festas", em: "🎁", nome: "Festas e presentes",
+    fixos: ["Parcela do buffet"],
+    eventuais: ["Presente de festinha", "Festa de aniversário", "Bolo e docinhos", "Lembrancinhas", "Decoração da festa", "Presente de Natal", "Amigo secreto", "Dia das Crianças", "Ovo de Páscoa", "Presente de formatura"] },
+  { id: "cuidados", em: "💇", nome: "Cuidados pessoais",
+    fixos: ["Corte de cabelo", "Shampoo e sabonete", "Creme dental", "Absorvente"],
+    eventuais: ["Salão / química", "Manicure", "Perfume e desodorante", "Protetor solar", "Dermatologista", "Remédio de espinha", "Furar a orelha", "Aparelho de barbear", "Repelente"] },
+  { id: "tecnologia", em: "📱", nome: "Celular e tecnologia",
+    fixos: ["Plano de celular", "Assinatura de apps"],
+    eventuais: ["Celular novo", "Trocar a tela", "Fone de ouvido", "Capinha e película", "Tablet", "Notebook da escola", "Carregador novo", "Troca de bateria", "Mouse e teclado", "Controle de videogame"] },
+  { id: "casa", em: "🏠", nome: "Casa e quarto",
+    fixos: ["Parte da luz", "Parte da água", "Internet de casa", "Parte do gás"],
+    eventuais: ["Cama e colchão", "Guarda-roupa", "Mesa de estudo", "Cadeira do quarto", "Decoração do quarto", "Roupa de cama", "Ventilador / ar", "Estante de livros", "Pintar o quarto"] },
+  { id: "documentos", em: "📄", nome: "Documentos",
+    fixos: [],
+    eventuais: ["Passaporte", "RG / identidade", "CPF", "Foto 3x4", "Autorização de viagem", "Reconhecer firma", "Certidão de nascimento", "Visto americano", "Taxa do cartório"] },
+  { id: "mesada", em: "💸", nome: "Mesada e imprevistos",
+    fixos: ["Mesada", "Dinheiro na mão", "Pensão / acordo"],
+    eventuais: ["Quebrou os óculos", "Perdeu o material", "Perdeu o casaco", "Quebrou algo na escola", "Multa da biblioteca", "Vaquinha da turma", "Presente da professora", "Recarga do cartão da escola", "Conserto de emergência"] },
+  { id: "outros", em: "➕", nome: "Outros", fixos: [], eventuais: ["Ainda não sei o que é"] },
+];
+const CAT = {}; CATEGORIAS.forEach(c => CAT[c.id] = c);
+const catOf = (id) => CAT[id] || CAT.outros;
+const itensDe = (c) => c.fixos.concat(c.eventuais);
+const ehItemFixo = (catId, desc) => catOf(catId).fixos.some(i => i.toLowerCase() === String(desc || "").toLowerCase());
+const CATS_PADRAO = ["alimentacao", "escola", "saude", "roupas", "lazer", "transporte"];
+
+/* os que mais escapam da memória */
+const ESQUECIDOS = [
+  ["Dinheiro solto dado na mão", "mesada"], ["Lanche da cantina", "alimentacao"], ["Presente de festinha de amiguinho", "festas"],
+  ["Remédio comprado na farmácia", "saude"], ["Uber pontual pra escola", "transporte"], ["Sorvete ou açaí do passeio", "alimentacao"],
+  ["Gasolina de levar e buscar", "transporte"], ["Vaquinha da turma", "mesada"], ["Recarga do cartão da escola", "mesada"],
+  ["Cópia e impressão de trabalho", "escola"], ["Material reposto (perdeu a lapiseira)", "escola"], ["Robux / compra dentro do jogo", "lazer"],
+  ["Delivery do dia corrido", "alimentacao"], ["Corte de cabelo", "cuidados"], ["Estacionamento e pedágio", "transporte"],
+  ["Meia, cueca e calcinha", "roupas"], ["Capinha e película do celular", "tecnologia"], ["Coparticipação do plano", "saude"],
+  ["Taxa de excursão paga em dinheiro", "escola"], ["Lembrancinha da festa", "festas"], ["Foto da escola", "escola"],
+  ["Pilha, cabo e carregador", "tecnologia"], ["Bilhete de ônibus do adolescente", "transporte"], ["Ovo de Páscoa / Dia das Crianças", "festas"],
+  ["Protetor solar e repelente", "cuidados"],
+];
+
+/* calendário: o que costuma aparecer em cada mês */
+const SAZONAL = {
+  1: ["Matrícula e rematrícula escolar", "Material escolar da lista", "Uniforme novo (cresceu?)", "Mochila, lancheira e estojo", "Livros didáticos e paradidáticos", "Colônia de férias e passeios", "Transporte escolar: contratar ou renovar"],
+  2: ["Volta às aulas, mensalidade cheia", "Livros que faltaram na lista", "Fantasia e viagem de Carnaval", "Tênis e sapato escolar", "Recarregar o cartão da cantina", "Matrícula do ano nas atividades", "Seguro escolar e taxa de material"],
+  3: ["Material de reposição (caderno, cola, tinta)", "Ovos de Páscoa antecipados", "Dentista do 1º semestre", "Uniforme de educação física", "Trabalhos escolares e projetos", "Presente de aniversário de coleguinha"],
+  4: ["Páscoa: ovos, cesta e chocolate", "Vacina da gripe (começa a campanha)", "Passeio de feriado e excursão", "Oftalmologista — óculos novos?", "Reforço escolar se as notas caírem", "Roupa de meia-estação"],
+  5: ["Dia das Mães: presente e almoço", "Roupa de frio (casaco, calça, meia)", "Vacina da gripe, última chamada", "Check-up pediátrico anual", "Prendas e barraca da festa junina", "Cobertor e botina novos"],
+  6: ["Festa junina: roupa caipira e chapéu", "Prendas, fichas e comida da quermesse", "Casaco e agasalho de inverno", "Provas finais: reforço e material", "Planejar e reservar as férias de julho"],
+  7: ["Viagem de férias: passagem e passeios", "Colônia de férias ou acampamento", "Cinema, parque e programas de férias", "Material do 2º semestre", "Consultas e exames nas férias", "Corte de cabelo e cuidados", "Roupa de viagem e mala"],
+  8: ["Volta às aulas do 2º semestre", "Dia dos Pais: presente e comemoração", "Uniforme: ainda serve?", "Tênis novo (desgaste do 1º semestre)", "Reposição de material escolar", "Mensalidades retomadas"],
+  9: ["Feira de ciências e trabalhos", "Excursão e passeio pedagógico", "Fotos escolares e anuário", "Roupa de primavera: o que não serve mais", "Comprar presente do Dia das Crianças antes da alta", "Dentista do 2º semestre"],
+  10: ["Dia das Crianças: presente e passeio", "Fantasia de Halloween", "Festa e evento da escola", "Brinquedo, jogo e bicicleta", "Vacinas de rotina e caderneta em dia", "Roupa de verão e chinelo"],
+  11: ["Black Friday: eletrônico, tablet e fone", "Black Friday: tênis, roupa e mochila do ano que vem", "Antecipar presentes de Natal", "Lista de material do próximo ano", "Protetor solar, roupa de banho e piscina", "Feriados e passeios"],
+  12: ["Presentes de Natal", "Amigo secreto da escola e da família", "Formatura (ABC, 5º, 9º ano, médio)", "Festa de fim de ano e apresentação", "Lembrancinha para as professoras", "Viagem de fim de ano", "Rematrícula e 1ª parcela do material"],
+};
+const ANUAIS = [
+  "Aniversário de cada filho (festa, bolo, presente)", "Renovação do plano de saúde (reajuste e faixa etária)",
+  "Matrícula / anuidade da atividade extracurricular", "Manutenção do aparelho ortodôntico", "Óculos ou lentes novas depois do oftalmo",
+  "Vacinas fora da rede pública (meningite, HPV, gripe)", "Passaporte, visto e documento de viagem",
+  "Troca de celular, tablet ou notebook", "Bicicleta, patins ou equipamento maior conforme cresce",
+  "Presentes de aniversário de colegas e primos ao longo do ano",
+];
+
+/* ==========================================================================
+   ESTADO E GRAVAÇÃO SEGURA
+   ========================================================================== */
+function padrao() {
+  return {
+    app: "zuzugue", schema_version: 1, versao_app: VERSAO,
+    atualizado_em: agora(), gravado_em_href: "", gravado_em_contexto: "",
+    criancas: [
+      { id: "c1", nome: "Tiago", cor: "var(--c1)", cls: "k1", em: "🧒" },
+      { id: "c2", nome: "Heloísa", cor: "var(--c2)", cls: "k2", em: "👧" },
+    ],
+    lancamentos: [], fixos: [], lixeira: [],
+    config: { criado_em: hojeISO(), ultimo_backup: null, desde_backup: 0, tema: "auto", viu_boas_vindas: false, uso_categoria: {}, avisos_ocultos: [] },
+  };
+}
+let S = padrao();
+let mesSel = mesHoje();
+let aba = "mes";
+let filtro = { quem: "todos", texto: "" };
+let efemero = false;      /* aba anônima / storage bloqueado */
+let semEspaco = false;    /* storage cheio */
+let soLeitura = false;    /* não consegui nem escrever o carimbo de teste */
+let avisoContexto = "";   /* abriu por outro caminho */
+let carimboCarregado = "";
+/* tudo que esta janela já viu — impede que um gasto apagado/desfeito volte na fusão */
+const conhecidos = new Set();
+const conhecidosFx = new Set();
+
+function contexto() {
+  try {
+    if (window.navigator.standalone === true) return "tela_inicio";
+    if (window.matchMedia && matchMedia("(display-mode: standalone)").matches) return "tela_inicio";
+  } catch (e) {}
+  const ua = navigator.userAgent || "";
+  if (/FBAN|FBAV|Instagram|Line\/|WhatsApp|GSA\//i.test(ua)) return "webview";
+  return /iPhone|iPad|iPod/i.test(ua) ? "safari" : "navegador";
+}
+
+function testaStorage() {
+  try { localStorage.setItem(K.teste, "1"); if (localStorage.getItem(K.teste) !== "1") throw 0; localStorage.removeItem(K.teste); return true; }
+  catch (e) { return false; }
+}
+
+function valido(d) { return d && d.app === "zuzugue" && Array.isArray(d.lancamentos); }
+
+function carregar() {
+  /* mesmo sem conseguir ESCREVER (aba anônima, storage cheio) seguimos tentando LER:
+     abrir vazio com os gastos gravados no aparelho seria o pior dos mundos */
+  if (!testaStorage()) { efemero = true; soLeitura = true; }
+  let d = null;
+  for (const chave of [K.atual, K.ant]) {
+    try {
+      const raw = localStorage.getItem(chave);
+      if (!raw) continue;
+      const p = JSON.parse(raw);
+      if (valido(p)) { d = p; if (chave === K.ant) console.warn("Usei a cópia anterior — a principal estava corrompida."); break; }
+    } catch (e) { console.warn("Falha lendo " + chave, e); }
+  }
+  if (!d) return;
+  if (d.schema_version > 1) { soLeitura = true; alert("Estes dados foram salvos por uma versão mais nova do Zuzugue. Atualize o app antes de continuar — nada será gravado até lá."); }
+
+  const base = padrao();
+  S = Object.assign(base, d);
+  S.config = Object.assign(base.config, d.config || {});
+  S.criancas = (Array.isArray(d.criancas) && d.criancas.length === 2)
+    ? d.criancas.map((c, i) => Object.assign({}, base.criancas[i], { nome: c.nome || base.criancas[i].nome }))
+    : base.criancas;
+  S.fixos = Array.isArray(d.fixos) ? d.fixos : [];
+  S.lixeira = Array.isArray(d.lixeira) ? d.lixeira : [];
+  carimboCarregado = S.atualizado_em || "";
+  S.lancamentos.forEach(l => conhecidos.add(l.id));
+  S.lixeira.forEach(l => conhecidos.add(l.id));
+  S.fixos.forEach(f => conhecidosFx.add(f.id));
+
+  /* abriu de outro caminho? o storage pode ser outro */
+  if (S.gravado_em_href && S.gravado_em_href !== location.href && S.lancamentos.length) {
+    avisoContexto = "caminho";
+  } else if (S.gravado_em_contexto && S.gravado_em_contexto !== contexto() && S.lancamentos.length) {
+    avisoContexto = "contexto";
+  }
+
+  /* lixeira: expurga o que passou de 30 dias */
+  const limite = somaDias(hojeISO(), -30);
+  const antes = S.lixeira.length;
+  S.lixeira = S.lixeira.filter(l => (l.excluido_em || "").slice(0, 10) >= limite);
+  if (S.lixeira.length !== antes) salvar();
+}
+
+/* Se outra janela do app gravou depois que esta carregou, JUNTA o que ela criou
+   em vez de sobrescrever. Só entra o que esta janela nunca viu — assim um gasto
+   apagado (ou um "Desfazer") não ressuscita. */
+function fundirDoDisco() {
+  let raw;
+  try { raw = localStorage.getItem(K.atual); } catch (e) { return; }
+  if (!raw) return;
+  let d;
+  try { d = JSON.parse(raw); } catch (e) { return; }
+  if (!valido(d) || !d.atualizado_em || d.atualizado_em === carimboCarregado) return;
+
+  let n = 0;
+  d.lancamentos.forEach(l => {
+    if (!l || !l.id || conhecidos.has(l.id)) return;
+    conhecidos.add(l.id); S.lancamentos.push(l); n++;
+  });
+  (d.lixeira || []).forEach(l => { if (l && l.id) conhecidos.add(l.id); });
+  (d.fixos || []).forEach(f => {
+    if (!f || !f.id || conhecidosFx.has(f.id)) return;
+    conhecidosFx.add(f.id); S.fixos.push(f);
+  });
+  carimboCarregado = d.atualizado_em;
+  if (n) { console.warn("Juntei " + n + " gasto(s) lançado(s) em outra janela."); toast(n === 1 ? "Juntei 1 gasto lançado em outra janela" : "Juntei " + n + " gastos lançados em outra janela"); }
+}
+
+let avisouQuota = false;
+function salvar(semFundir) {
+  if (soLeitura) return false;
+  if (!semFundir) fundirDoDisco();
+  S.atualizado_em = agora();
+  S.gravado_em_href = location.href;
+  S.gravado_em_contexto = contexto();
+  S.versao_app = VERSAO;
+  const txt = JSON.stringify(S);
+  try {
+    /* grava em duas fases: só promove depois de reler e validar */
+    localStorage.setItem(K.novo, txt);
+    const conf = JSON.parse(localStorage.getItem(K.novo));
+    if (!valido(conf)) throw new Error("gravação não conferiu");
+    const atual = localStorage.getItem(K.atual);
+    if (atual) { try { localStorage.setItem(K.ant, atual); } catch (e) {} }
+    localStorage.setItem(K.atual, txt);
+    localStorage.removeItem(K.novo);
+    carimboCarregado = S.atualizado_em;
+    efemero = false; semEspaco = false; avisouQuota = false;
+    return true;
+  } catch (e) {
+    const cheio = e && (e.name === "QuotaExceededError" || e.code === 22 || e.code === 1014);
+    if (cheio) {
+      /* joga fora a cópia de reserva e o rascunho de importação para abrir espaço */
+      try {
+        localStorage.removeItem(K.ant); localStorage.removeItem(K.pre); localStorage.removeItem(K.novo);
+        localStorage.setItem(K.atual, txt);
+        carimboCarregado = S.atualizado_em; semEspaco = false;
+        return true;
+      } catch (e2) {}
+      semEspaco = true;
+    } else {
+      efemero = true;
+    }
+    /* a folha abre depois (quem chamou salvar() costuma fechar a folha em seguida) e
+       nunca quando a página está sendo descarregada — ninguém veria o aviso */
+    if (!avisouQuota && document.visibilityState !== "hidden") {
+      avisouQuota = true;
+      setTimeout(() => sheetSemEspaco(!cheio), 420);
+    }
+    return false;
+  }
+}
+
+/* nunca deixar o toast dizer "salvo" quando a gravação falhou */
+function conferido(ok) {
+  if (!ok) toast("⚠️ Não consegui guardar neste aparelho", "Fazer cópia", irParaBackup);
+  return ok;
+}
+
+/* outra janela do mesmo app gravou por cima */
+window.addEventListener("storage", (e) => {
+  if (e.key !== K.atual || !e.newValue) return;
+  try {
+    const d = JSON.parse(e.newValue);
+    if (valido(d) && d.atualizado_em !== S.atualizado_em) {
+      toast("Atualizado em outra janela", "Recarregar", () => location.reload());
+    }
+  } catch (err) {}
+});
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") salvar(); });
+window.addEventListener("pagehide", () => salvar());
+
+/* ==========================================================================
+   CONSULTAS
+   ========================================================================== */
+const doMes = (mk) => S.lancamentos.filter(l => mesDe(l.data) === mk);
+const totalDe = (arr) => arr.reduce((s, l) => s + l.valor, 0);
+const idC = (i) => S.criancas[i].id;
+const nomeQuem = (q) => q === "ambos" ? "Os dois" : ((S.criancas.find(c => c.id === q) || {}).nome || "—");
+const clsQuem = (q) => q === "ambos" ? "k3" : ((S.criancas.find(c => c.id === q) || {}).cls || "k3");
+
+function porCrianca(arr) {
+  const r = {}; S.criancas.forEach(c => r[c.id] = 0);
+  let compart = 0, total = 0;
+  arr.forEach(l => {
+    total += l.valor;
+    if (l.quem === "ambos") {
+      const p1 = (typeof l.pct1 === "number" ? l.pct1 : 50) / 100;
+      r[idC(0)] += l.valor * p1;
+      r[idC(1)] += l.valor * (1 - p1);
+      compart += l.valor;
+    } else if (r[l.quem] != null) r[l.quem] += l.valor;
+    else { r[idC(0)] += l.valor / 2; r[idC(1)] += l.valor / 2; compart += l.valor; }
+  });
+  /* arredonda o 1º e dá o resto ao 2º: a soma dos dois bate exatamente com o total */
+  r[idC(0)] = Math.round(r[idC(0)]);
+  r[idC(1)] = total - r[idC(0)];
+  r._compartilhado = compart;
+  r._total = total;
+  return r;
+}
+function porCategoria(arr) {
+  const m = new Map();
+  arr.forEach(l => m.set(l.cat, (m.get(l.cat) || 0) + l.valor));
+  return Array.from(m.entries()).map(([id, v]) => ({ cat: catOf(id), v })).sort((a, b) => b.v - a.v);
+}
+const fixosAtivos = () => S.fixos.filter(f => f.ativo !== false);
+/* considera lançado tanto pelo botão do checklist (fixo_id) quanto digitado à mão
+   com o mesmo nome e a mesma pessoa — senão o "Lançar de uma vez" duplicaria */
+const faltamFixos = (mk) => {
+  const arr = doMes(mk);
+  return fixosAtivos().filter(f => !arr.some(l =>
+    l.fixo_id === f.id ||
+    (String(l.desc).toLowerCase() === String(f.desc).toLowerCase() && l.quem === f.quem)
+  ));
+};
+const lancamentoDoFixo = (arr, f) => arr.find(l =>
+  l.fixo_id === f.id ||
+  (String(l.desc).toLowerCase() === String(f.desc).toLowerCase() && l.quem === f.quem)
+);
+
+/* gasto acumulado até o dia N do mês (comparação justa entre mês parcial e mês fechado) */
+function totalAteDia(mk, dia) { return totalDe(doMes(mk).filter(l => +l.data.slice(8, 10) <= dia)); }
+
+/* ==========================================================================
+   AVISOS RÁPIDOS (toast com desfazer)
+   ========================================================================== */
+let toastT;
+function toast(msg, rotuloAcao, acao) {
+  const t = $("#toast");
+  t.innerHTML = "";
+  t.appendChild(el("span", null, msg));
+  if (rotuloAcao) {
+    const b = el("button", null, rotuloAcao);
+    b.addEventListener("click", () => { t.classList.remove("on"); acao(); });
+    t.appendChild(b);
+  }
+  t.classList.add("on");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove("on"), rotuloAcao ? 6500 : 2600);
+  try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) {}
+}
+
+/* ==========================================================================
+   FOLHA (modal)
+   ========================================================================== */
+let sheetAberta = false;
+let voltandoDoHistorico = false;
+
+function abrirSheet(html, depois, manterRolagem) {
+  const bg = $("#sheet-bg"), sh = $("#sheet");
+  const y = manterRolagem ? sh.scrollTop : 0;
+  sh.onclick = null;                       /* não acumula ouvintes entre redesenhos */
+  sh.innerHTML = '<div class="grab"></div>' + html;
+  sh.scrollTop = y;
+  bg.classList.add("on");
+  document.body.style.overflow = "hidden";
+  /* o botão "voltar" do celular fecha a folha em vez de sair do app */
+  if (!sheetAberta) {
+    sheetAberta = true;
+    try { history.pushState({ zzFolha: 1 }, ""); } catch (e) {}
+  }
+  if (depois) depois(sh);
+}
+
+function fecharSheet() {
+  const estava = sheetAberta;
+  sheetAberta = false;
+  $("#sheet-bg").classList.remove("on");
+  document.body.style.overflow = "";
+  setTimeout(() => { if (!sheetAberta) { $("#sheet").innerHTML = ""; $("#sheet").onclick = null; } }, 240);
+  if (estava && !voltandoDoHistorico) {
+    try { if (history.state && history.state.zzFolha) history.back(); } catch (e) {}
+  }
+}
+
+window.addEventListener("popstate", () => {
+  if (!sheetAberta) return;
+  voltandoDoHistorico = true;
+  fecharSheet();
+  voltandoDoHistorico = false;
+});
+$("#sheet-bg").addEventListener("click", (e) => { if (e.target.id === "sheet-bg") fecharSheet(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") fecharSheet(); });
+
+/* ==========================================================================
+   FORMULÁRIO DE GASTO
+   ========================================================================== */
+let F = null;
+
+function abrirForm(pre) {
+  pre = pre || {};
+  F = {
+    id: pre.id || null,
+    valor: pre.valor || 0,
+    desc: pre.desc || "",
+    quem: pre.quem || "ambos",
+    pct1: typeof pre.pct1 === "number" ? pre.pct1 : 50,
+    cat: pre.cat || "",
+    data: pre.data || (mesSel === mesHoje() ? hojeISO() : mesSel + "-01"),
+    fixo: !!pre.fixo,
+    obs: pre.obs || "",
+    fixo_id: pre.fixo_id || null,
+    salvarFixo: false,
+    todasCats: !!pre.cat && CATS_PADRAO.indexOf(pre.cat) < 0,
+    verData: false,
+    primeiroDesenho: true,
+  };
+  desenhaForm();
+}
+
+function catsRapidas() {
+  const uso = S.config.uso_categoria || {};
+  const ord = Object.keys(uso).sort((a, b) => uso[b] - uso[a]).filter(id => CAT[id] && id !== "outros");
+  const lista = ord.slice(0, 6);
+  CATS_PADRAO.forEach(id => { if (lista.length < 6 && lista.indexOf(id) < 0) lista.push(id); });
+  if (F.cat && lista.indexOf(F.cat) < 0 && !F.todasCats) lista[5] = F.cat;
+  return lista;
+}
+
+function desenhaForm() {
+  const editando = !!F.id;
+  const rapidas = catsRapidas();
+  const listaCats = F.todasCats ? CATEGORIAS.map(c => c.id) : rapidas;
+  const cObj = F.cat ? catOf(F.cat) : null;
+  const hoje = hojeISO(), ontem = somaDias(hoje, -1);
+
+  const html = `
+    <h2>${editando ? "Editar gasto" : "Novo gasto"}</h2>
+    <p class="muted" style="margin:0 0 10px">Só o valor é obrigatório. O resto ajuda depois.</p>
+
+    <div class="money">
+      <span class="cur">R$</span>
+      <input id="f-valor" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="0,00" value="${F.valor ? brlSec(F.valor) : ""}">
+    </div>
+
+    <label class="f" style="margin-top:14px"><span>Pra quem?</span></label>
+    <div class="seg" id="f-quem">
+      ${S.criancas.map(c => `<button type="button" data-q="${c.id}" aria-pressed="${F.quem === c.id}" style="${F.quem === c.id ? `border-color:${c.cor};color:${c.cor}` : ""}"><span class="em">${c.em}</span>${esc(c.nome)}</button>`).join("")}
+      <button type="button" data-q="ambos" aria-pressed="${F.quem === "ambos"}" style="${F.quem === "ambos" ? "border-color:var(--c3);color:var(--c3)" : ""}"><span class="em">👫</span>Os dois</button>
+    </div>
+    ${F.quem === "ambos" ? `<div class="sugs" id="f-pct">
+      <span class="muted" style="width:100%;margin-bottom:-2px">Divide ${F.pct1}% para ${esc(S.criancas[0].nome)} e ${100 - F.pct1}% para ${esc(S.criancas[1].nome)}:</span>
+      ${[50, 60, 40, 70, 30].map(p => `<button type="button" class="sug" data-p="${p}" aria-pressed="${F.pct1 === p}">${p}/${100 - p}</button>`).join("")}
+    </div>` : ""}
+
+    <label class="f" style="margin-top:14px"><span>Categoria</span></label>
+    <div class="catgrid" id="f-cat">
+      ${listaCats.map(id => { const c = catOf(id); return `<button type="button" class="catbtn" data-c="${id}" aria-pressed="${F.cat === id}"><span class="em">${c.em}</span>${esc(c.nome)}</button>`; }).join("")}
+      ${F.todasCats ? "" : '<button type="button" class="catbtn" data-todas="1"><span class="em">⋯</span>Outra</button>'}
+    </div>
+
+    ${cObj ? `<div class="sugs" id="f-sugs">
+      <span class="muted" style="width:100%;margin-bottom:-2px">Foi com o quê?</span>
+      ${itensDe(cObj).map(i => `<button type="button" class="sug" data-i="${esc(i)}" aria-pressed="${F.desc === i}">${esc(i)}</button>`).join("")}
+    </div>` : ""}
+
+    <label class="f"><span>Escrever com as suas palavras (opcional)</span>
+      <input id="f-desc" class="inp" type="text" autocomplete="off" enterkeyhint="done" placeholder="${cObj ? esc(cObj.nome) : "ex.: tênis do futebol"}" value="${esc(F.desc)}">
+    </label>
+
+    <label class="f" style="margin-top:14px"><span>Quando?</span></label>
+    <div class="seg mini" id="f-quando">
+      <button type="button" data-d="${hoje}" aria-pressed="${F.data === hoje}">Hoje</button>
+      <button type="button" data-d="${ontem}" aria-pressed="${F.data === ontem}">Ontem</button>
+      <button type="button" data-outro="1" aria-pressed="${F.data !== hoje && F.data !== ontem}">${F.data !== hoje && F.data !== ontem ? dataBR(F.data) : "Outro dia"}</button>
+    </div>
+    ${F.verData || (F.data !== hoje && F.data !== ontem) ? `<input id="f-data" class="inp" type="date" value="${F.data}" max="${somaDias(hoje, 365)}" style="margin-top:8px">` : ""}
+
+    <label class="f" style="display:flex;align-items:center;gap:10px;margin-top:16px">
+      <input type="checkbox" id="f-fixo" ${F.fixo ? "checked" : ""} style="width:20px;height:20px;accent-color:var(--brand);-webkit-appearance:checkbox;appearance:checkbox">
+      <span style="margin:0;font-size:13.5px;font-weight:600">É gasto de todo mês</span>
+    </label>
+    ${!editando ? `<label class="f" style="display:flex;align-items:center;gap:10px;margin-top:6px">
+      <input type="checkbox" id="f-salvarfixo" ${F.salvarFixo ? "checked" : ""} style="width:20px;height:20px;accent-color:var(--brand);-webkit-appearance:checkbox;appearance:checkbox">
+      <span style="margin:0;font-size:13.5px;font-weight:600">Guardar na lista de fixos<br><small class="muted" style="font-weight:400">para lançar com 1 toque todo mês</small></span>
+    </label>` : ""}
+
+    <details style="margin-top:12px" ${F.obs ? "open" : ""}>
+      <summary style="font-size:13px;color:var(--ink-2);font-weight:600">+ observação</summary>
+      <textarea id="f-obs" class="inp" style="margin-top:8px" placeholder="ex.: paguei no cartão da vovó, 3x">${esc(F.obs)}</textarea>
+    </details>
+
+    <button class="btn pri" id="f-ok" style="margin-top:16px">${editando ? "Salvar alteração" : "Salvar" + (F.valor ? " " + brl(F.valor) : "")}</button>
+    ${editando ? '' : '<button class="btn ghost" id="f-ok2" style="margin-top:8px">Salvar e lançar outro</button>'}
+    <div class="btnrow">
+      <button class="btn ghost" id="f-cancel">Cancelar</button>
+      ${editando ? '<button class="btn ghost dan" id="f-del">Apagar</button>' : ""}
+    </div>
+  `;
+
+  const primeiro = F.primeiroDesenho;
+  F.primeiroDesenho = false;
+
+  abrirSheet(html, (sh) => {
+    const iv = $("#f-valor", sh);
+    const btnOk = $("#f-ok", sh);
+
+    /* máscara: os centavos entram pela direita, ela nunca digita vírgula */
+    iv.addEventListener("input", () => {
+      const dig = iv.value.replace(/\D/g, "").slice(0, 9);
+      F.valor = dig ? parseInt(dig, 10) : 0;
+      iv.value = F.valor ? brlSec(F.valor) : "";
+      try { iv.setSelectionRange(iv.value.length, iv.value.length); } catch (e) {}
+      if (!F.id) btnOk.textContent = "Salvar" + (F.valor ? " " + brl(F.valor) : "");
+    });
+    iv.addEventListener("focus", () => setTimeout(() => { try { iv.setSelectionRange(iv.value.length, iv.value.length); } catch (e) {} }, 10));
+    iv.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); iv.blur(); } });
+    /* só abre o teclado na PRIMEIRA vez — a cada toque seria irritante */
+    if (!F.id && primeiro) setTimeout(() => { try { iv.focus(); } catch (e) {} }, 280);
+
+    $("#f-desc", sh).addEventListener("input", e => F.desc = e.target.value);
+    $("#f-fixo", sh).addEventListener("change", e => F.fixo = e.target.checked);
+    const sf = $("#f-salvarfixo", sh); if (sf) sf.addEventListener("change", e => F.salvarFixo = e.target.checked);
+    const ob = $("#f-obs", sh); if (ob) ob.addEventListener("input", e => F.obs = e.target.value);
+    const dt = $("#f-data", sh); if (dt) dt.addEventListener("change", e => { if (e.target.value) { F.data = e.target.value; recolhe(); desenhaForm(); } });
+
+    $("#f-quem", sh).addEventListener("click", e => { const b = e.target.closest("[data-q]"); if (!b) return; recolhe(); F.quem = b.dataset.q; desenhaForm(); });
+    const pc = $("#f-pct", sh);
+    if (pc) pc.addEventListener("click", e => { const b = e.target.closest("[data-p]"); if (!b) return; recolhe(); F.pct1 = +b.dataset.p; desenhaForm(); });
+
+    $("#f-cat", sh).addEventListener("click", e => {
+      const t = e.target.closest("[data-todas]"), b = e.target.closest("[data-c]");
+      recolhe();
+      if (t) { F.todasCats = true; desenhaForm(); return; }
+      if (!b) return;
+      F.cat = F.cat === b.dataset.c ? "" : b.dataset.c;
+      desenhaForm();
+    });
+    const sg = $("#f-sugs", sh);
+    if (sg) sg.addEventListener("click", e => {
+      const b = e.target.closest("[data-i]"); if (!b) return;
+      recolhe();
+      F.desc = F.desc === b.dataset.i ? "" : b.dataset.i;
+      /* só LIGA o "todo mês" quando o item é tipicamente fixo — nunca desliga o que ela marcou */
+      if (F.desc && ehItemFixo(F.cat, F.desc)) F.fixo = true;
+      desenhaForm();
+    });
+    $("#f-quando", sh).addEventListener("click", e => {
+      const d = e.target.closest("[data-d]"), o = e.target.closest("[data-outro]");
+      recolhe();
+      if (d) { F.data = d.dataset.d; F.verData = false; }
+      if (o) F.verData = true;
+      desenhaForm();
+    });
+
+    btnOk.addEventListener("click", () => gravar(false));
+    const b2 = $("#f-ok2", sh); if (b2) b2.addEventListener("click", () => gravar(true));
+    $("#f-cancel", sh).addEventListener("click", fecharSheet);
+    const bd = $("#f-del", sh);
+    if (bd) bd.addEventListener("click", excluirAtual);
+
+    function recolhe() {
+      const d = $("#f-desc", sh); if (d) F.desc = d.value;
+      const o = $("#f-obs", sh); if (o) F.obs = o.value;
+      const f = $("#f-fixo", sh); if (f) F.fixo = f.checked;
+      const s2 = $("#f-salvarfixo", sh); if (s2) F.salvarFixo = s2.checked;
+    }
+    F._recolhe = recolhe;
+  }, !primeiro);
+}
+
+function gravar(continuar) {
+  if (F._recolhe) F._recolhe();
+  F.desc = (F.desc || "").trim();
+  F.obs = (F.obs || "").trim();
+
+  if (!F.valor) { toast("Falta o valor 🙂"); const i = $("#f-valor"); if (i) i.focus(); return; }
+  if (!F.cat) F.cat = "outros";
+  const rotulo = F.desc || (F.cat === "outros" ? "Gasto" : catOf(F.cat).nome);
+
+  if (F.id) {
+    const i = S.lancamentos.findIndex(l => l.id === F.id);
+    if (i >= 0) Object.assign(S.lancamentos[i], { valor: F.valor, desc: rotulo, quem: F.quem, pct1: F.pct1, cat: F.cat, data: F.data, fixo: F.fixo, obs: F.obs, atualizado_em: agora() });
+    const ok = salvar();
+    fecharSheet();
+    /* mudou a data para outro mês? vai junto, senão o gasto "some" da tela */
+    const mudouMes = mesDe(F.data) !== mesSel;
+    if (mudouMes) mesSel = mesDe(F.data);
+    render();
+    if (conferido(ok)) toast(mudouMes ? "Alterado ✓ — movido para " + mesCurto(mesSel) : "Alterado ✓");
+    return;
+  }
+
+  const novo = {
+    id: uid(), data: F.data, desc: rotulo, valor: F.valor, quem: F.quem, pct1: F.pct1,
+    cat: F.cat, fixo: F.fixo, obs: F.obs, fixo_id: F.fixo_id || null, criado_em: agora(),
+  };
+  S.lancamentos.push(novo);
+  conhecidos.add(novo.id);
+  S.config.uso_categoria[F.cat] = (S.config.uso_categoria[F.cat] || 0) + 1;
+  S.config.desde_backup = (S.config.desde_backup || 0) + 1;
+  /* guardado AGORA: o Desfazer não pode consultar o F, que já pode ser outro formulário */
+  let fixoCriadoId = null;
+  if (F.salvarFixo) {
+    const fx = { id: uid(), desc: rotulo, valor: F.valor, cat: F.cat, quem: F.quem, pct1: F.pct1, ativo: true, criado_em: agora() };
+    conhecidosFx.add(fx.id);
+    S.fixos.push(fx);
+    fixoCriadoId = fx.id;
+  }
+  const gravou = salvar();
+
+  if (mesDe(novo.data) !== mesSel) mesSel = mesDe(novo.data);
+
+  if (continuar) {
+    const g = { quem: F.quem, cat: F.cat, data: F.data, pct1: F.pct1 };
+    fecharSheet();
+    setTimeout(() => abrirForm(g), 140);
+  } else {
+    fecharSheet();
+  }
+  render();
+  if (!conferido(gravou)) return;
+  toast(brl(novo.valor) + " · " + nomeQuem(novo.quem), "Desfazer", () => {
+    S.lancamentos = S.lancamentos.filter(l => l.id !== novo.id);
+    if (fixoCriadoId) S.fixos = S.fixos.filter(f => f.id !== fixoCriadoId);
+    S.config.desde_backup = Math.max(0, (S.config.desde_backup || 1) - 1);
+    salvar(); render(); toast("Desfeito");
+  });
+}
+
+function excluirAtual() {
+  const id = F.id;
+  const i = S.lancamentos.findIndex(l => l.id === id);
+  if (i < 0) return;
+  const removido = S.lancamentos.splice(i, 1)[0];
+  removido.excluido_em = agora();
+  S.lixeira.push(removido);
+  const ok = salvar();
+  fecharSheet(); render();
+  if (!conferido(ok)) return;
+  toast("Apagado", "Desfazer", () => {
+    S.lixeira = S.lixeira.filter(l => l.id !== id);
+    delete removido.excluido_em;
+    S.lancamentos.push(removido);
+    salvar(); render(); toast("De volta ✓");
+  });
+}
+
+/* ==========================================================================
+   RENDER
+   ========================================================================== */
+let ultimaAba = null, ultimoMes = null;
+function render() {
+  /* trocou de tela ou de mês → vai para o topo; só redesenhou → fica onde estava */
+  const mudouDeLugar = aba !== ultimaAba || mesSel !== ultimoMes;
+  const y = window.scrollY;
+  ultimaAba = aba; ultimoMes = mesSel;
+
+  const p = mesSel.split("-");
+  $("#mes-label").innerHTML = `${MESES[+p[1] - 1]} <small>de ${p[0]}</small>`;
+  $("#subtitulo").textContent = "gastos de " + S.criancas.map(c => c.nome).join(" e ");
+  $$(".tab").forEach(t => t.setAttribute("aria-current", String(t.dataset.tab === aba)));
+  $("#monthnav").classList.toggle("hide", aba === "ajustes");
+  $("#fab").classList.toggle("hide", aba === "ajustes");
+  const v = $("#view");
+  v.innerHTML = "";
+  if (aba === "mes") telaMes(v);
+  else if (aba === "resumo") telaResumo(v);
+  else if (aba === "lembretes") telaLembretes(v);
+  else telaAjustes(v);
+  window.scrollTo({ top: mudouDeLugar ? 0 : Math.min(y, Math.max(0, document.body.scrollHeight - window.innerHeight)) });
+}
+
+/* ---------- avisos de topo ---------- */
+function avisos(v) {
+  if (efemero) {
+    const a = el("div", "aviso d");
+    a.innerHTML = `<span>🚫</span><div><b>Este aparelho não está guardando nada</b>Costuma ser aba anônima, armazenamento cheio ou o visualizador do WhatsApp/e-mail. Abra pelo Safari ou Chrome — enquanto isso, nada do que você digitar será salvo.<br><button id="av-exp">Copiar o que já está na tela</button></div>`;
+    v.appendChild(a);
+    $("#av-exp", a).addEventListener("click", () => sheetTexto("Cópia dos seus dados", JSON.stringify(S), "Copie tudo e mande para você mesma no WhatsApp antes de fechar."));
+  }
+  if (semEspaco) {
+    const a = el("div", "aviso d");
+    a.innerHTML = `<span>📦</span><div><b>O armazenamento do celular encheu</b>Os gastos novos podem não estar sendo guardados. Salve uma cópia agora e depois apague meses antigos.<br><button id="av-esp">Salvar cópia agora</button></div>`;
+    v.appendChild(a);
+    $("#av-esp", a).addEventListener("click", exportarJSON);
+  }
+  if (contexto() === "webview") {
+    const a = el("div", "aviso w");
+    a.innerHTML = `<span>⚠️</span><div><b>Você abriu de dentro de outro aplicativo</b>Toque em “Abrir no Safari” (ou no Chrome) antes de lançar gastos — aqui dentro eles podem se perder.</div>`;
+    v.appendChild(a);
+  }
+  if (avisoContexto && (S.config.avisos_ocultos || []).indexOf("ctx") < 0) {
+    const a = el("div", "aviso w");
+    a.innerHTML = `<span>📂</span><div><b>Parece que você abriu o app por outro caminho</b>Se faltarem gastos, volte pelo atalho de sempre — ou traga o seu último backup em <b>Cópia</b>.<button class="x" id="x-ctx">✕</button></div>`;
+    v.appendChild(a);
+    $("#x-ctx", a).addEventListener("click", () => { S.config.avisos_ocultos.push("ctx"); avisoContexto = ""; salvar(); render(); });
+  }
+
+  if (!S.config.viu_boas_vindas && S.lancamentos.length === 0) {
+    const a = el("div", "aviso i");
+    a.innerHTML = `<span>👋</span><div><b>Bem-vinda ao Zuzugue!</b>Anote aqui os gastos de ${esc(S.criancas.map(c => c.nome).join(" e "))}. Tudo fica guardado <b style="display:inline">só neste aparelho</b> — sem login, sem internet.<br>Antes de começar: deixe o app na tela de início (veja em <b style="display:inline">Cópia</b>).<br><button id="ok-bv">Entendi, começar</button></div>`;
+    v.appendChild(a);
+    $("#ok-bv", a).addEventListener("click", () => { S.config.viu_boas_vindas = true; salvar(); render(); });
+    return;
+  }
+
+  const n = S.lancamentos.length;
+  if (n >= 5) {
+    const ub = S.config.ultimo_backup;
+    const dias = ub ? diasEntre(ub.slice(0, 10), hojeISO()) : Infinity;
+    const novos = S.config.desde_backup || 0;
+    if (!ub) {
+      const a = el("div", "aviso d");
+      a.innerHTML = `<span>💾</span><div><b>Você ainda não tem cópia dos seus dados</b>São ${n} gastos guardados só aqui. Se o celular limpar os dados do navegador, some tudo.<br><button id="ir-backup">Salvar meus dados num arquivo</button></div>`;
+      v.appendChild(a);
+      $("#ir-backup", a).addEventListener("click", irParaBackup);
+    } else if (dias > 7 || novos >= 20) {
+      const a = el("div", "aviso w");
+      a.innerHTML = `<span>💾</span><div><b>Última cópia há ${dias} ${dias === 1 ? "dia" : "dias"}${novos ? " · " + novos + " gastos novos desde então" : ""}</b>Leva 5 segundos e evita perder tudo.<br><button id="ir-backup">Salvar cópia agora</button></div>`;
+      v.appendChild(a);
+      $("#ir-backup", a).addEventListener("click", irParaBackup);
+    }
+  }
+}
+function irParaBackup() { aba = "ajustes"; render(); setTimeout(() => { const b = $("#bloco-backup"); if (b) b.scrollIntoView({ behavior: "smooth", block: "center" }); }, 80); }
+
+/* ---------- TELA: MÊS ---------- */
+function telaMes(v) {
+  avisos(v);
+
+  const arr = doMes(mesSel);
+  const tot = totalDe(arr);
+  const mkAnt = somaMes(mesSel, -1);
+  const parcial = mesSel === mesHoje();
+  const diaHoje = +hojeISO().slice(8, 10);
+  /* fevereiro não tem dia 31: a comparação usa o último dia que existe no mês anterior */
+  const diaRef = Math.min(diaHoje, diasNoMes(mkAnt));
+  const totAnt = parcial ? totalAteDia(mkAnt, diaRef) : totalDe(doMes(mkAnt));
+
+  const hero = el("div", "card total-hero");
+  let cmp = "";
+  if (totAnt > 0) {
+    const dif = tot - totAnt;
+    const ref = parcial ? `${mesCurto(mkAnt)} até o dia ${diaRef}: ${brl(totAnt)}` : `${mesCurto(mkAnt)}: ${brl(totAnt)}`;
+    cmp = dif === 0 ? ref + " — igual" : `${ref} · ${dif > 0 ? "▲" : "▼"} ${brl(Math.abs(dif))}`;
+  } else if (arr.length) cmp = `${arr.length} ${arr.length === 1 ? "gasto anotado" : "gastos anotados"}`;
+  hero.innerHTML = `<div class="lbl">Total de ${esc(mesCurto(mesSel))}</div><div class="val">${brl(tot)}</div><div class="cmp">${esc(cmp)}</div>`;
+  v.appendChild(hero);
+
+  if (arr.length) {
+    const pc = porCrianca(arr);
+    const kids = el("div", "kids");
+    S.criancas.forEach(c => {
+      const d = el("div", "kid");
+      d.innerHTML = `<div class="nm"><span class="dot" style="background:${c.cor}"></span>${esc(c.nome)}</div><div class="vl">${brl(pc[c.id])}</div><div class="pc">${tot ? Math.round(pc[c.id] / tot * 100) : 0}% do mês</div>`;
+      kids.appendChild(d);
+    });
+    v.appendChild(kids);
+
+    const fx = totalDe(arr.filter(l => l.fixo)), ev = tot - fx;
+    const falta = faltamFixos(mesSel);
+    const fe = el("div", "card");
+    fe.innerHTML = `<h2>Todo mês × fora do previsto</h2>
+      <div class="bar"><div class="bl">🔁 Gastos de todo mês</div><div class="bv">${brl(fx)}</div><div class="track"><div class="fill" style="width:${tot ? fx / tot * 100 : 0}%"></div></div></div>
+      <div class="bar"><div class="bl">✨ Fora do previsto</div><div class="bv">${brl(ev)}</div><div class="track"><div class="fill" style="width:${tot ? ev / tot * 100 : 0}%;background:var(--c2)"></div></div></div>`;
+    if (falta.length) {
+      const p = el("p", "muted");
+      p.style.marginTop = "10px";
+      p.innerHTML = (falta.length === 1 ? "Ainda falta 1 gasto de todo mês: " : `Ainda faltam ${falta.length} gastos de todo mês: `) +
+        esc(falta.slice(0, 3).map(f => f.desc).join(", ")) + (falta.length > 3 ? "…" : "");
+      const b = el("button", "btn sm", "Ver e lançar");
+      b.style.marginTop = "8px";
+      b.addEventListener("click", () => { aba = "lembretes"; render(); });
+      fe.appendChild(p); fe.appendChild(b);
+    }
+    v.appendChild(fe);
+  }
+
+  /* filtros */
+  const ch = el("div", "chips");
+  ch.style.marginTop = "14px";
+  [{ id: "todos", n: "Todos" }].concat(S.criancas.map(c => ({ id: c.id, n: c.nome }))).concat([{ id: "ambos", n: "Os dois" }]).forEach(o => {
+    const b = el("button", "chip", o.n);
+    b.setAttribute("aria-pressed", String(filtro.quem === o.id));
+    b.addEventListener("click", () => { filtro.quem = o.id; render(); });
+    ch.appendChild(b);
+  });
+  v.appendChild(ch);
+
+  if (doMes(mesSel).length > 12) {
+    const busca = el("input", "inp");
+    busca.type = "search"; busca.placeholder = "🔎 procurar no mês…"; busca.value = filtro.texto; busca.style.marginTop = "8px";
+    busca.addEventListener("input", e => { filtro.texto = e.target.value; const l = $("#lista-lanc"); if (l) l.replaceWith(montaLista()); });
+    v.appendChild(busca);
+  } else {
+    /* sem campo de busca na tela, um filtro de texto esquecido esconderia tudo */
+    filtro.texto = "";
+  }
+  v.appendChild(montaLista());
+
+  function montaLista() {
+    const box = el("div"); box.id = "lista-lanc";
+    let ls = doMes(mesSel);
+    if (filtro.quem !== "todos") ls = ls.filter(l => l.quem === filtro.quem || (filtro.quem !== "ambos" && l.quem === "ambos"));
+    const q = filtro.texto.trim().toLowerCase();
+    if (q) ls = ls.filter(l => (l.desc + " " + catOf(l.cat).nome + " " + (l.obs || "")).toLowerCase().indexOf(q) >= 0);
+    ls.sort((a, b) => a.data === b.data ? String(b.criado_em || "").localeCompare(String(a.criado_em || "")) : b.data.localeCompare(a.data));
+
+    if (!ls.length) {
+      const e2 = el("div", "card");
+      e2.innerHTML = `<div class="empty"><span class="big">${doMes(mesSel).length ? "🔍" : "🧾"}</span>${doMes(mesSel).length ? "Nada com esse filtro." : "Nenhum gasto em " + esc(mesCurto(mesSel)) + " ainda.<br>Toque em <b>＋ Gasto</b> para começar."}</div>`;
+      box.appendChild(e2);
+      return box;
+    }
+
+    const dias = new Map();
+    ls.forEach(l => { if (!dias.has(l.data)) dias.set(l.data, []); dias.get(l.data).push(l); });
+
+    const card = el("div", "card");
+    card.style.paddingTop = "4px";
+    Array.from(dias.keys()).forEach(dia => {
+      const g = el("div", "daygroup");
+      const h = el("div", "dh");
+      h.innerHTML = `<span>${dataBR(dia)} · ${diaSemana(dia)}${dia === hojeISO() ? " · hoje" : ""}</span><span>${brl(totalDe(dias.get(dia)))}</span>`;
+      g.appendChild(h);
+      dias.get(dia).forEach(l => g.appendChild(linhaLanc(l)));
+      card.appendChild(g);
+    });
+    box.appendChild(card);
+
+    const rod = el("p", "muted center");
+    rod.style.marginTop = "10px";
+    /* filtrando por um filho, o rodapé mostra a PARTE dele — senão contradiz o cartão */
+    const soma = (filtro.quem !== "todos" && filtro.quem !== "ambos")
+      ? porCrianca(ls)[filtro.quem] : totalDe(ls);
+    rod.textContent = `${ls.length} ${ls.length === 1 ? "gasto" : "gastos"} · ${brl(soma)}` +
+      ((filtro.quem !== "todos" && filtro.quem !== "ambos") ? " (a parte de " + nomeQuem(filtro.quem) + ")" : "");
+    box.appendChild(rod);
+    return box;
+  }
+}
+
+function linhaLanc(l, mostraData) {
+  const c = catOf(l.cat);
+  const b = el("button", "lanc");
+  b.innerHTML = `<span class="ico">${c.em}</span>
+    <span class="mid"><span class="d1">${esc(l.desc)}</span>
+    <span class="d2"><span class="pill ${clsQuem(l.quem)}">${esc(nomeQuem(l.quem))}</span><span>${esc(c.nome)}</span>${mostraData ? "<span>" + dataBR(l.data) + "</span>" : ""}${l.fixo ? '<span class="pill fix">todo mês</span>' : ""}${l.obs ? "<span>📝</span>" : ""}</span></span>
+    <span class="vl">${brl(l.valor)}</span>`;
+  b.addEventListener("click", () => abrirForm(l));
+  return b;
+}
+
+/* ---------- TELA: RESUMO ---------- */
+function telaResumo(v) {
+  const arr = doMes(mesSel);
+  const tot = totalDe(arr);
+  const mkAnt = somaMes(mesSel, -1);
+  const parcial = mesSel === mesHoje();
+  const diaHoje = +hojeISO().slice(8, 10);
+  const diaRef = Math.min(diaHoje, diasNoMes(mkAnt));
+  const totAnt = parcial ? totalAteDia(mkAnt, diaRef) : totalDe(doMes(mkAnt));
+
+  const hero = el("div", "card total-hero");
+  hero.innerHTML = `<div class="lbl">${esc(nomeMes(mesSel))}</div><div class="val">${brl(tot)}</div><div class="cmp">${arr.length} ${arr.length === 1 ? "gasto" : "gastos"}${parcial ? " · mês em andamento" : ""}</div>`;
+  v.appendChild(hero);
+
+  if (!arr.length) {
+    const e2 = el("div", "card");
+    e2.innerHTML = '<div class="empty"><span class="big">📊</span>Sem gastos neste mês ainda.</div>';
+    v.appendChild(e2);
+    telaResumoAno(v);
+    return;
+  }
+
+  /* frase em português claro */
+  const cats = porCategoria(arr);
+  const pc = porCrianca(arr);
+  const maiusc = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  let frase;
+  if (totAnt > 0) {
+    const dif = tot - totAnt;
+    const pct = Math.abs(Math.round(dif / totAnt * 100));
+    if (Math.abs(dif) < 2000) {
+      frase = `${maiusc(mesCurto(mesSel))} está bem parecido com ${mesCurto(mkAnt)}.`;
+    } else {
+      /* qual categoria explica a diferença — comparando o mesmo pedaço do mês */
+      const antCat = {};
+      doMes(mkAnt).forEach(l => { if (parcial && +l.data.slice(8, 10) > diaRef) return; antCat[l.cat] = (antCat[l.cat] || 0) + l.valor; });
+      const ids = new Set(cats.map(x => x.cat.id).concat(Object.keys(antCat)));
+      let campea = null;
+      ids.forEach(id => {
+        const atual = (cats.find(x => x.cat.id === id) || { v: 0 }).v;
+        const d2 = atual - (antCat[id] || 0);
+        if (!campea || (dif > 0 ? d2 > campea.d : d2 < campea.d)) campea = { nome: catOf(id).nome, d: d2 };
+      });
+      const porque = campea && Math.abs(campea.d) >= Math.abs(dif) * 0.3
+        ? `, principalmente por ${campea.nome} (${brl(Math.abs(campea.d))} a ${campea.d > 0 ? "mais" : "menos"})` : "";
+      frase = `${maiusc(mesCurto(mesSel))} está ${brl(Math.abs(dif))} ${dif > 0 ? "acima" : "abaixo"} de ${mesCurto(mkAnt)} (${pct}%)${porque}.`;
+    }
+  } else {
+    frase = `Maior gasto do mês: ${cats[0].cat.nome}, ${brl(cats[0].v)}.`;
+  }
+  const fr = el("div", "frase"); fr.textContent = frase;
+  v.appendChild(fr);
+
+  /* projeção */
+  if (parcial) {
+    const falta = faltamFixos(mesSel);
+    const aFaltar = falta.reduce((s, f) => s + (f.valor || 0), 0);
+    /* a média diária só pode contar os dias que já passaram — gasto com data futura
+       (já lançado) entra no total, mas não infla o ritmo */
+    const evAteHoje = totalDe(arr.filter(l => !l.fixo && +l.data.slice(8, 10) <= diaHoje));
+    const diasMes = diasNoMes(mesSel);
+    const proj = Math.round((tot + aFaltar + evAteHoje / diaHoje * (diasMes - diaHoje)) / 100) * 100;
+    const pj = el("div", "card");
+    pj.innerHTML = `<h2>No ritmo de hoje</h2><p class="sub">Estimativa simples: o que já foi + fixos que faltam + a média dos dias que passaram.</p>
+      <div class="total-hero" style="padding:4px 0 0"><div class="val" style="font-size:26px">≈ ${brl(proj)}</div><div class="cmp">é como o mês deve fechar</div></div>`;
+    v.appendChild(pj);
+  }
+
+  /* por filho */
+  const k = el("div", "card");
+  k.innerHTML = "<h2>Por filho</h2><p class='sub'>Os gastos “dos dois” já entram divididos.</p>" +
+    S.criancas.map(c => `<div class="bar"><div class="bl">${c.em} ${esc(c.nome)}</div><div class="bv">${brl(pc[c.id])} <span class="muted">${tot ? Math.round(pc[c.id] / tot * 100) : 0}%</span></div><div class="track"><div class="fill" style="width:${tot ? pc[c.id] / tot * 100 : 0}%;background:${c.cor}"></div></div></div>`).join("") +
+    (pc._compartilhado ? `<p class="muted" style="margin-top:10px">Inclui ${brl(pc._compartilhado)} de gastos dos dois, divididos entre eles.</p>` : "");
+  v.appendChild(k);
+
+  /* por categoria */
+  const cc = el("div", "card");
+  cc.innerHTML = "<h2>Por categoria</h2><p class='sub'>Onde o dinheiro foi neste mês.</p>";
+  const m3 = [somaMes(mesSel, -1), somaMes(mesSel, -2), somaMes(mesSel, -3)];
+  cats.forEach(x => {
+    const hist = m3.map(mk => totalDe(doMes(mk).filter(l => l.cat === x.cat.id)));
+    const comHist = hist.filter(h => h > 0);
+    const media = comHist.length ? comHist.reduce((a, b) => a + b, 0) / comHist.length : 0;
+    let nota = "";
+    if (media > 0 && !parcial) {
+      const r = x.v / media;
+      if (r >= 1.6) nota = `bem acima do normal (média ${brl(media)})`;
+      else if (r <= 0.5) nota = `abaixo do normal (média ${brl(media)})`;
+    }
+    const d = el("div", "bar");
+    d.innerHTML = `<div class="bl">${x.cat.em} ${esc(x.cat.nome)}</div><div class="bv">${brl(x.v)} <span class="muted">${Math.round(x.v / tot * 100)}%</span></div><div class="track"><div class="fill" style="width:${x.v / cats[0].v * 100}%"></div></div>${nota ? '<div class="nota">' + esc(nota) + "</div>" : ""}`;
+    cc.appendChild(d);
+  });
+  v.appendChild(cc);
+
+  /* maiores */
+  const tc = el("div", "card");
+  tc.innerHTML = "<h2>Os 5 maiores do mês</h2><p class='sub'>Bom para conferir se nenhum valor foi digitado errado.</p>";
+  arr.slice().sort((a, b) => b.valor - a.valor).slice(0, 5).forEach(l => tc.appendChild(linhaLanc(l, true)));
+  v.appendChild(tc);
+
+  /* sem categoria */
+  const semCat = arr.filter(l => l.cat === "outros");
+  if (semCat.length) {
+    const sc = el("div", "card");
+    sc.innerHTML = `<h2>Sem categoria</h2><p class="sub">${semCat.length} ${semCat.length === 1 ? "gasto ficou" : "gastos ficaram"} em “Outros”. Toque para organizar.</p>`;
+    semCat.forEach(l => sc.appendChild(linhaLanc(l, true)));
+    v.appendChild(sc);
+  }
+
+  telaResumoAno(v);
+
+  const b1 = el("button", "btn", "📤 Compartilhar o resumo do mês");
+  b1.style.marginTop = "12px";
+  b1.addEventListener("click", compartilharResumo);
+  v.appendChild(b1);
+}
+
+function telaResumoAno(v) {
+  const ano = mesSel.slice(0, 4);
+  const meses = [];
+  for (let m = 1; m <= 12; m++) { const mk = `${ano}-${String(m).padStart(2, "0")}`; meses.push({ mk, m, v: totalDe(doMes(mk)) }); }
+  const totAno = meses.reduce((s, x) => s + x.v, 0);
+  const comGasto = meses.filter(x => x.v > 0);
+  if (!totAno) return;
+  const max = Math.max(1, ...meses.map(x => x.v));
+
+  const ac = el("div", "card");
+  ac.innerHTML = `<h2>Ano de ${ano}</h2><p class="sub">Total ${brl(totAno)} · média ${brl(Math.round(totAno / comGasto.length))} nos meses com gasto</p>`;
+  const cols = el("div", "cols");
+  meses.forEach(x => {
+    const c = el("div", "col" + (x.mk === mesSel ? " cur" : ""));
+    const bar = el("div", "cb"); bar.style.height = (x.v / max * 88) + "%";
+    c.appendChild(bar); c.appendChild(el("div", "cl", MESES_C[x.m - 1]));
+    c.title = MESES[x.m - 1] + ": " + brl(x.v);
+    c.addEventListener("click", () => { mesSel = x.mk; render(); });
+    cols.appendChild(c);
+  });
+  ac.appendChild(cols);
+  v.appendChild(ac);
+}
+
+/* ---------- TELA: LEMBRETES ---------- */
+function telaLembretes(v) {
+  const mNum = +mesSel.slice(5, 7);
+  const arr = doMes(mesSel);
+  const dataPadrao = mesSel === mesHoje() ? hojeISO() : mesSel + "-05";
+
+  /* 1. fixos do mês */
+  const fc = el("div", "card");
+  fc.innerHTML = `<h2>🔁 Seus gastos de todo mês — ${esc(MESES[mNum - 1])}</h2><p class="sub">Toque no que já aconteceu para lançar.</p>`;
+  const ativos = fixosAtivos();
+  if (!ativos.length) {
+    fc.innerHTML += `<div class="empty" style="padding:14px 6px">Você ainda não guardou nenhum fixo.<br><span class="muted">Ao lançar um gasto, marque “Guardar na lista de fixos”.</span></div>`;
+  } else {
+    let pend = 0;
+    ativos.forEach(f => {
+      const lanc = lancamentoDoFixo(arr, f);
+      const b = el("button", "check" + (lanc ? " done" : ""));
+      b.innerHTML = `<span class="bx">✓</span><span class="tx">${catOf(f.cat).em} ${esc(f.desc)} <span class="pill ${clsQuem(f.quem)}">${esc(nomeQuem(f.quem))}</span></span><span class="vv">${brl(lanc ? lanc.valor : f.valor)}</span>`;
+      if (lanc) b.addEventListener("click", () => abrirForm(lanc));
+      else { pend++; b.addEventListener("click", () => abrirForm({ desc: f.desc, valor: f.valor, cat: f.cat, quem: f.quem, pct1: f.pct1, fixo: true, fixo_id: f.id, data: dataPadrao })); }
+      fc.appendChild(b);
+    });
+    if (pend) {
+      const bt = el("button", "btn pri", pend === 1 ? "Lançar o que falta" : `Lançar de uma vez os ${pend} que faltam`);
+      bt.style.marginTop = "12px";
+      bt.addEventListener("click", lancarTodosFixos);
+      fc.appendChild(bt);
+    } else {
+      const p = el("p", "muted center", "Todos os fixos deste mês já foram lançados ✓");
+      p.style.marginTop = "10px"; fc.appendChild(p);
+    }
+  }
+  const bg = el("button", "btn ghost sm", "Gerenciar a lista de fixos");
+  bg.style.marginTop = "10px"; bg.style.width = "100%";
+  bg.addEventListener("click", sheetFixos);
+  fc.appendChild(bg);
+  v.appendChild(fc);
+
+  /* 2. sazonal */
+  const sc = el("div", "card");
+  sc.innerHTML = `<h2>📅 Em ${esc(MESES[mNum - 1])} costuma aparecer</h2><p class="sub">Toque para lançar já preenchido.</p>`;
+  const sd = el("div", "sugs");
+  (SAZONAL[mNum] || []).forEach(t => {
+    const b = el("button", "sug", t);
+    b.addEventListener("click", () => abrirForm({ desc: t, cat: adivinhaCat(t), data: dataPadrao }));
+    sd.appendChild(b);
+  });
+  sc.appendChild(sd);
+  v.appendChild(sc);
+
+  /* 3. esquecidos */
+  const ec = el("div", "card");
+  ec.innerHTML = `<h2>🤔 Esqueceu de anotar alguma coisa?</h2><p class="sub">Os gastos que mais escapam da memória.</p>`;
+  const ed = el("div", "sugs");
+  ESQUECIDOS.forEach(x => {
+    const b = el("button", "sug", x[0]);
+    b.addEventListener("click", () => abrirForm({ desc: x[0], cat: x[1], data: dataPadrao }));
+    ed.appendChild(b);
+  });
+  ec.appendChild(ed);
+  v.appendChild(ec);
+
+  /* 4. anuais */
+  const an = el("div", "card");
+  an.innerHTML = `<h2>🗓️ Uma vez por ano</h2><p class="sub">Não caem todo mês, mas pesam quando chegam.</p>`;
+  const ad = el("div", "sugs");
+  ANUAIS.forEach(t => {
+    const b = el("button", "sug", t);
+    b.addEventListener("click", () => abrirForm({ desc: t, cat: adivinhaCat(t), data: dataPadrao }));
+    ad.appendChild(b);
+  });
+  an.appendChild(ad);
+  v.appendChild(an);
+
+  /* 5. catálogo completo */
+  const tc = el("div", "card");
+  tc.innerHTML = `<h2>📚 Todos os tipos de gasto</h2><p class="sub">Passe os olhos por categoria — lembrou de algum, toque.</p>`;
+  CATEGORIAS.forEach(c => {
+    if (c.id === "outros") return;
+    const d = el("details");
+    d.style.borderTop = "1px solid var(--line)";
+    d.innerHTML = `<summary style="padding:11px 2px;font-size:14px;font-weight:600">${c.em} ${esc(c.nome)} <span class="muted">(${itensDe(c).length})</span></summary>`;
+    const box = el("div", "sugs");
+    box.style.paddingBottom = "10px";
+    c.fixos.forEach(i => { const b = el("button", "sug", "🔁 " + i); b.addEventListener("click", () => abrirForm({ desc: i, cat: c.id, fixo: true, data: dataPadrao })); box.appendChild(b); });
+    c.eventuais.forEach(i => { const b = el("button", "sug", i); b.addEventListener("click", () => abrirForm({ desc: i, cat: c.id, data: dataPadrao })); box.appendChild(b); });
+    d.appendChild(box);
+    tc.appendChild(d);
+  });
+  v.appendChild(tc);
+}
+
+function adivinhaCat(txt) {
+  const t = txt.toLowerCase();
+  for (const c of CATEGORIAS) {
+    if (c.id === "outros") continue;
+    for (const i of itensDe(c)) if (i.length > 5 && t.indexOf(i.toLowerCase()) >= 0) return c.id;
+  }
+  const mapa = [
+    ["matríc|material|escolar|uniforme|apostila|livro|excurs|formatur|mochila|lancheira|rifa|cantina|semestre|aula", "escola"],
+    ["vacina|pediatr|remédi|farmác|exame|plano de saúde|consulta|check-up|ultrassom", "saude"],
+    ["dentista|aparelho|oftalmo|óculos|lente|flúor", "dentista"],
+    ["psicó|fono|terapia|psicopedag|nutricion", "terapias"],
+    ["lanche|mercado|delivery|restaur|sorvete|açaí|pizza|chocolate|comida|bolo", "alimentacao"],
+    ["roupa|tênis|sapato|casaco|frio|chinelo|meia|calçad|banho|caipira|fantasia", "roupas"],
+    ["van|uber|passag|ônibus|gasolina|estacion|pedági|transporte", "transporte"],
+    ["natação|futebol|balé|judô|caratê|campeonato|federação|chuteira|kimono|espetáculo|academia", "esportes"],
+    ["inglês|música|professor particular|robótica|curso|intercâmbio|recital|proficiência|reforço", "cursos"],
+    ["cinema|parque|museu|zoo|brinquedo|videogame|gibi|viagem|passeio|colônia|férias|clube|streaming|robux|show", "lazer"],
+    ["presente|festa|aniversári|natal|páscoa|ovo|amigo secreto|lembrancinha|dia das crianças|buffet|docinho|junina|quermesse|prenda", "festas"],
+    ["cabelo|shampoo|sabonete|manicure|perfume|protetor|repelente|espinha|dermato|absorvente", "cuidados"],
+    ["celular|tablet|notebook|fone|tela|capinha|película|carregador|bateria|eletrônico|black friday", "tecnologia"],
+    ["luz|água|gás|internet|cama|colchão|quarto|guarda-roupa|mesa de estudo|cobertor", "casa"],
+    ["passaporte|rg|cpf|cartóri|certidão|visto|3x4|firma|autorização", "documentos"],
+    ["mesada|dinheiro|pensão|vaquinha|multa|perdeu|quebrou|recarga", "mesada"],
+  ];
+  for (const par of mapa) if (new RegExp(par[0]).test(t)) return par[1];
+  return "outros";
+}
+
+function lancarTodosFixos() {
+  const falta = faltamFixos(mesSel);
+  if (!falta.length) return;
+  const dia = mesSel === mesHoje() ? hojeISO() : mesSel + "-05";
+  const novos = falta.map(f => ({
+    id: uid(), data: dia, desc: f.desc, valor: f.valor, quem: f.quem, pct1: f.pct1 || 50,
+    cat: f.cat, fixo: true, obs: "", fixo_id: f.id, criado_em: agora(),
+  }));
+  novos.forEach(n => { conhecidos.add(n.id); S.lancamentos.push(n); });
+  S.config.desde_backup = (S.config.desde_backup || 0) + novos.length;
+  const ok = salvar();
+  render();
+  if (!conferido(ok)) return;
+  toast(`${novos.length} fixos lançados`, "Desfazer", () => {
+    const ids = novos.map(n => n.id);
+    S.lancamentos = S.lancamentos.filter(l => ids.indexOf(l.id) < 0);
+    salvar(); render(); toast("Desfeito");
+  });
+}
+
+function sheetFixos() {
+  const linhas = S.fixos.map(f => `
+    <div class="lanc" style="align-items:center">
+      <span class="ico">${catOf(f.cat).em}</span>
+      <span class="mid"><span class="d1">${esc(f.desc)}</span><span class="d2"><span class="pill ${clsQuem(f.quem)}">${esc(nomeQuem(f.quem))}</span><span>${brl(f.valor)}</span>${f.ativo === false ? '<span class="pill">pausado</span>' : ""}</span></span>
+      <button class="btn sm ghost" data-pause="${esc(f.id)}">${f.ativo === false ? "Ativar" : "Pausar"}</button>
+      <button class="btn sm ghost dan" data-del="${esc(f.id)}">✕</button>
+    </div>`).join("");
+  abrirSheet(`<h2>Gastos de todo mês</h2>
+    <p class="muted">Modelos para lançar com um toque. O valor guardado é só uma sugestão — dá para corrigir na hora de lançar.</p>
+    <div class="card" style="padding:4px 12px">${linhas || '<div class="empty">Nenhum fixo guardado ainda.</div>'}</div>
+    <p class="muted" style="margin-top:12px">Para criar um novo: lance o gasto e marque <b>“Guardar na lista de fixos”</b>.</p>
+    <button class="btn" id="fx-fechar" style="margin-top:12px">Fechar</button>`, (sh) => {
+    $("#fx-fechar", sh).addEventListener("click", fecharSheet);
+    /* onclick (e não addEventListener): a folha é redesenhada a cada toque e os
+       ouvintes se acumulariam — "Pausar" pararia de funcionar no 2º clique */
+    sh.onclick = (e => {
+      const p = e.target.closest("[data-pause]"), d = e.target.closest("[data-del]");
+      if (p) { const f = S.fixos.find(x => x.id === p.dataset.pause); if (f) { f.ativo = f.ativo === false; salvar(); sheetFixos(); render(); } }
+      if (d) {
+        const i = S.fixos.findIndex(x => x.id === d.dataset.del);
+        if (i < 0) return;
+        const rem = S.fixos.splice(i, 1)[0];
+        salvar(); sheetFixos(); render();
+        toast("Fixo removido da lista", "Desfazer", () => { S.fixos.splice(i, 0, rem); salvar(); sheetFixos(); render(); });
+      }
+    });
+    /* sheetFixos() se redesenha sozinha; abrirSheet zera o onclick antes de cada desenho */
+  });
+}
+
+/* ---------- TELA: CÓPIA E AJUSTES ---------- */
+function telaAjustes(v) {
+  const c2 = el("div", "card");
+  c2.id = "bloco-backup";
+  const ub = S.config.ultimo_backup;
+  const dias = ub ? diasEntre(ub.slice(0, 10), hojeISO()) : null;
+  c2.innerHTML = `<h2>💾 Cópia dos seus dados</h2>
+    <p class="sub">Seus gastos moram só neste aparelho. O arquivo do app <b>não</b> leva os dados junto — a cópia é o que salva você se trocar de celular.</p>
+    <p class="muted">Última cópia: <b>${ub ? esc(dataBR(ub.slice(0, 10))) + (dias === 0 ? " (hoje)" : " · há " + dias + (dias === 1 ? " dia" : " dias")) : "nunca"}</b><br>${S.lancamentos.length} gastos · ${S.fixos.length} fixos${S.config.desde_backup ? " · " + S.config.desde_backup + " novos desde a última cópia" : ""}</p>`;
+  const bx = el("div", "btnrow");
+  const bJ = el("button", "btn pri", "⬇️ Salvar meus dados num arquivo");
+  bJ.addEventListener("click", exportarJSON);
+  bx.appendChild(bJ);
+  c2.appendChild(bx);
+  const bx2 = el("div", "btnrow");
+  const bI = el("button", "btn ghost", "⬆️ Trazer de um arquivo");
+  bI.addEventListener("click", importar);
+  const bC = el("button", "btn ghost", "📊 Planilha (Excel)");
+  bC.addEventListener("click", exportarCSV);
+  bx2.appendChild(bI); bx2.appendChild(bC);
+  c2.appendChild(bx2);
+  const dica = el("p", "muted");
+  dica.style.marginTop = "10px";
+  dica.innerHTML = "💡 Depois de baixar, mande o arquivo para você mesma no WhatsApp ou salve no Drive/iCloud. Vira uma cópia fora do celular.";
+  c2.appendChild(dica);
+  v.appendChild(c2);
+
+  const c3 = el("div", "card");
+  c3.innerHTML = `<h2>📱 Deixar na tela de início</h2><p class="sub">Fica igual a um aplicativo, abre offline e o iPhone deixa de apagar os dados por falta de uso.</p>
+    <p class="muted"><b>iPhone:</b> abra no Safari → botão Compartilhar (quadradinho com a seta) → <b>Adicionar à Tela de Início</b>.<br><br><b>Android:</b> abra no Chrome → menu ⋮ → <b>Adicionar à tela inicial</b>.<br><br>⚠️ Depois disso, use <b>sempre o mesmo atalho</b>. Se abrir por outro caminho (dentro do WhatsApp, por exemplo), o app pode aparecer vazio — os gastos continuam no atalho de sempre.</p>
+    <p class="muted" style="margin-top:8px">Você está usando: <b>${esc({ tela_inicio: "atalho da tela de início ✓", safari: "Safari", webview: "visualizador de outro app ⚠️", navegador: "navegador" }[contexto()])}</b></p>`;
+  v.appendChild(c3);
+
+  const c1 = el("div", "card");
+  c1.innerHTML = "<h2>👧🧒 Nome dos filhos</h2><p class='sub'>Como aparecem no app.</p>";
+  S.criancas.forEach((c, i) => {
+    const l = el("label", "f");
+    l.innerHTML = `<span>Filho ${i + 1}</span><input class="inp" type="text" value="${esc(c.nome)}" maxlength="24" enterkeyhint="done">`;
+    const inp = l.querySelector("input");
+    inp.addEventListener("change", () => { c.nome = inp.value.trim() || c.nome; salvar(); render(); toast("Nome atualizado"); });
+    c1.appendChild(l);
+  });
+  v.appendChild(c1);
+
+  if (S.lixeira.length) {
+    const cl = el("div", "card");
+    cl.innerHTML = `<h2>🗑️ Apagados recentemente</h2><p class="sub">Ficam aqui por 30 dias. Toque para trazer de volta.</p>`;
+    S.lixeira.slice().reverse().forEach(l => {
+      const b = el("button", "lanc");
+      b.innerHTML = `<span class="ico">${catOf(l.cat).em}</span><span class="mid"><span class="d1">${esc(l.desc)}</span><span class="d2"><span>${dataBR(l.data)}</span><span>apagado em ${dataBR((l.excluido_em || "").slice(0, 10))}</span></span></span><span class="vl">${brl(l.valor)}</span>`;
+      b.addEventListener("click", () => {
+        S.lixeira = S.lixeira.filter(x => x.id !== l.id);
+        delete l.excluido_em;
+        S.lancamentos.push(l);
+        salvar(); render(); toast("De volta ✓");
+      });
+      cl.appendChild(b);
+    });
+    v.appendChild(cl);
+  }
+
+  const c4 = el("div", "card");
+  c4.innerHTML = "<h2>🎨 Aparência</h2>";
+  const seg = el("div", "seg");
+  [["auto", "Automático", "◐"], ["light", "Claro", "☀️"], ["dark", "Escuro", "🌙"]].forEach(par => {
+    const b = el("button");
+    b.innerHTML = `<span class="em">${par[2]}</span>${par[1]}`;
+    b.setAttribute("aria-pressed", String((S.config.tema || "auto") === par[0]));
+    b.addEventListener("click", () => { S.config.tema = par[0]; aplicaTema(true); salvar(); render(); });
+    seg.appendChild(b);
+  });
+  c4.appendChild(seg);
+  v.appendChild(c4);
+
+  const c5 = el("div", "card");
+  c5.innerHTML = `<h2>ℹ️ Sobre</h2><p class="muted">Zuzugue APP v${VERSAO} — feito sob medida para a família.<br>Funciona sem internet, sem cadastro e sem enviar nada para lugar nenhum.</p>`;
+  const bZ = el("button", "btn ghost dan", "Apagar todos os dados deste aparelho");
+  bZ.style.marginTop = "10px";
+  bZ.addEventListener("click", () => {
+    if (!confirm("Apagar TODOS os gastos e fixos deste aparelho?\n\nIsso não tem volta. Salve uma cópia antes.")) return;
+    if (prompt('Para confirmar, escreva: APAGAR') !== "APAGAR") { toast("Cancelado"); return; }
+    const nomes = S.criancas.map(c => c.nome);
+    S = padrao();
+    S.criancas.forEach((c, i) => c.nome = nomes[i]);
+    S.config.viu_boas_vindas = true;
+    try { localStorage.removeItem(K.pre); localStorage.removeItem(K.ant); } catch (e) {}
+    salvar(true); mesSel = mesHoje(); aba = "mes"; render(); toast("Tudo apagado");
+  });
+  c5.appendChild(bZ);
+  v.appendChild(c5);
+}
+
+/* ==========================================================================
+   EXPORTAR / IMPORTAR / COMPARTILHAR
+   ========================================================================== */
+function baixarArquivo(nome, conteudo, tipo) {
+  try {
+    const blob = new Blob([conteudo], { type: tipo });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = nome; a.rel = "noopener";
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { try { document.body.removeChild(a); URL.revokeObjectURL(url); } catch (e) {} }, 5000);
+    return true;
+  } catch (e) { return false; }
+}
+
+async function exportarJSON() {
+  const nome = `zuzugue-${hojeISO()}.json`;
+  const txt = JSON.stringify(S);
+  let ok = false;
+
+  /* 1) folha de compartilhamento com arquivo (melhor no iPhone) */
+  try {
+    if (navigator.canShare && navigator.share && typeof File === "function") {
+      const arq = new File([txt], nome, { type: "application/json" });
+      if (navigator.canShare({ files: [arq] })) { await navigator.share({ files: [arq], title: "Cópia do Zuzugue" }); ok = true; }
+    }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+
+  /* 2) download normal  3) texto para copiar */
+  if (!ok) ok = baixarArquivo(nome, txt, "application/json");
+
+  /* só carimba "tem cópia" se a cópia realmente saiu — senão o aviso vermelho
+     sumiria sem existir backup nenhum */
+  if (ok) {
+    S.config.ultimo_backup = agora();
+    S.config.desde_backup = 0;
+    salvar();
+  }
+
+  if (ok) {
+    toast("Cópia salva ✓");
+    setTimeout(() => alert("Cópia salva como:\n" + nome + "\n\n💡 Agora mande esse arquivo para você mesma no WhatsApp ou salve no Drive/iCloud.\n\nÉ com ele que você recupera tudo se trocar de celular — o arquivo do app sozinho NÃO leva os gastos."), 400);
+    render();
+  } else {
+    sheetTexto("Cópia dos seus dados", txt, "Copie tudo e mande para você mesma no WhatsApp. Guarde a mensagem: é o seu backup.", () => {
+      /* copiou de verdade: aí sim conta como cópia feita */
+      S.config.ultimo_backup = agora();
+      S.config.desde_backup = 0;
+      salvar(); render();
+    });
+  }
+}
+
+function exportarCSV() {
+  const sep = ";";
+  const cab = ["Data", "Descrição", "Categoria", "De quem", "Todo mês", "Valor", "Observação"];
+  const linhas = S.lancamentos.slice().sort((a, b) => a.data.localeCompare(b.data)).map(l => [
+    dataBR(l.data), l.desc, catOf(l.cat).nome, nomeQuem(l.quem), l.fixo ? "Sim" : "Não",
+    (l.valor / 100).toFixed(2).replace(".", ","), l.obs || "",
+  ].map(x => '"' + String(x).replace(/"/g, '""') + '"').join(sep));
+  const csv = "﻿" + "sep=" + sep + "\n" + cab.join(sep) + "\n" + linhas.join("\n");
+  if (baixarArquivo(`zuzugue-gastos-${hojeISO()}.csv`, csv, "text/csv;charset=utf-8")) toast("Planilha baixada ✓");
+  else sheetTexto("Planilha", csv, "Copie e cole no Excel ou no Google Planilhas.");
+}
+
+function importar() {
+  abrirSheet(`<h2>Trazer dados de um arquivo</h2>
+    <p class="muted">Escolha o arquivo <b>.json</b> que você salvou antes. Os gastos do arquivo são somados aos daqui — nada é duplicado e nada é apagado.</p>
+    <label class="f"><span>Arquivo de cópia</span><input type="file" id="imp-file" accept=".json,application/json" class="inp"></label>
+    <details style="margin-top:14px"><summary style="font-size:13px;color:var(--ink-2);font-weight:600">Ou colar o texto da cópia</summary>
+      <textarea id="imp-txt" class="inp" style="margin-top:8px;min-height:120px" placeholder="cole aqui o conteúdo do arquivo"></textarea>
+      <button class="btn sm" id="imp-txt-ok" style="margin-top:8px">Trazer do texto</button>
+    </details>
+    <button class="btn ghost" id="imp-cancel" style="margin-top:16px">Cancelar</button>`, (sh) => {
+    $("#imp-cancel", sh).addEventListener("click", fecharSheet);
+    $("#imp-file", sh).addEventListener("change", e => {
+      const f = e.target.files && e.target.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = () => aplicaImport(String(r.result));
+      r.onerror = () => alert("Não consegui ler o arquivo.");
+      r.readAsText(f);
+    });
+    $("#imp-txt-ok", sh).addEventListener("click", () => aplicaImport($("#imp-txt", sh).value));
+  });
+}
+
+function aplicaImport(txt) {
+  let d;
+  try { d = JSON.parse(txt); } catch (e) { alert("Esse arquivo não parece uma cópia do Zuzugue."); return; }
+  if (!valido(d)) { alert("Esse arquivo não parece uma cópia do Zuzugue.\n\nProcure um arquivo com nome parecido com “zuzugue-2026-07-22.json”."); return; }
+
+  /* foto do estado atual, para poder desfazer */
+  let antes = null;
+  try { antes = JSON.stringify(S); localStorage.setItem(K.pre, antes); } catch (e) {}
+
+  const vazio = S.lancamentos.length === 0;
+  const ids = new Set(S.lancamentos.map(l => l.id));
+  /* Contagem, não conjunto: se ela lançou DOIS lanches iguais no mesmo dia, os dois
+     têm que voltar. O que não pode é o mesmo arquivo entrar duas vezes — disso cuidam
+     os ids, e a contagem cobre o caso raro de backup antigo sem id. */
+  const conta = new Map();
+  const chave = (l) => l.data + "|" + l.desc + "|" + l.valor + "|" + l.quem;
+  S.lancamentos.forEach(l => conta.set(chave(l), (conta.get(chave(l)) || 0) + 1));
+  let novos = 0;
+  d.lancamentos.forEach(l => {
+    if (!l || !l.data || l.valor == null) return;
+    if (l.id && ids.has(l.id)) return;                 /* mesmo lançamento, já está aqui */
+    const k = chave(l);
+    const jaTem = conta.get(k) || 0;
+    if (jaTem > 0) { conta.set(k, jaTem - 1); return; } /* casa 1 a 1 com o que já existe */
+    const nl = Object.assign({ id: uid(), fixo: false, cat: "outros", quem: "ambos", pct1: 50, obs: "" }, l);
+    if (ids.has(nl.id)) nl.id = uid();
+    ids.add(nl.id);
+    conhecidos.add(nl.id);
+    S.lancamentos.push(nl);
+    novos++;
+  });
+  if (Array.isArray(d.fixos)) {
+    const fa = new Set(S.fixos.map(f => f.desc + "|" + f.cat + "|" + f.quem));
+    d.fixos.forEach(f => {
+      if (!f || !f.desc || fa.has(f.desc + "|" + f.cat + "|" + f.quem)) return;
+      const nf = Object.assign({ id: uid(), ativo: true, valor: 0, cat: "outros", quem: "ambos" }, f);
+      conhecidosFx.add(nf.id);
+      S.fixos.push(nf);
+      fa.add(f.desc + "|" + f.cat + "|" + f.quem);
+    });
+  }
+  if (vazio && Array.isArray(d.criancas) && d.criancas.length === 2) {
+    d.criancas.forEach((c, i) => { if (c && c.nome) S.criancas[i].nome = c.nome; });
+  }
+  const okImp = salvar();
+  fecharSheet(); render();
+  /* o rascunho de segurança não fica para sempre ocupando espaço */
+  setTimeout(() => { try { localStorage.removeItem(K.pre); } catch (e) {} }, 90000);
+  if (!conferido(okImp)) return;
+  const ignorados = d.lancamentos.length - novos;
+  toast(`${novos} ${novos === 1 ? "gasto trazido" : "gastos trazidos"}${ignorados ? " · " + ignorados + (ignorados === 1 ? " já existia" : " já existiam") : ""}`, "Desfazer", () => {
+    if (!antes) return;
+    try { S = JSON.parse(antes); salvar(true); render(); toast("Importação desfeita"); } catch (e) {}
+  });
+}
+
+function sheetTexto(titulo, txt, ajuda, aoCopiar) {
+  abrirSheet(`<h2>${esc(titulo)}</h2>
+    <p class="muted">${esc(ajuda || "")}</p>
+    <textarea class="inp" id="tx-area" style="min-height:180px;font-size:11px" readonly>${esc(txt)}</textarea>
+    <div class="btnrow"><button class="btn pri" id="tx-copy">Copiar tudo</button><button class="btn ghost" id="tx-fechar">Fechar</button></div>`, (sh) => {
+    $("#tx-fechar", sh).addEventListener("click", fecharSheet);
+    $("#tx-copy", sh).addEventListener("click", async () => {
+      const a = $("#tx-area", sh);
+      let copiou = false;
+      try { await navigator.clipboard.writeText(a.value); copiou = true; } catch (e) {}
+      if (!copiou) {
+        try { a.focus(); a.select(); a.setSelectionRange(0, 999999); copiou = document.execCommand("copy") === true; } catch (e2) {}
+      }
+      if (copiou) { toast("Copiado ✓"); if (aoCopiar) aoCopiar(); }
+      else toast("Não consegui copiar — selecione o texto e copie na mão");
+    });
+  });
+}
+
+function sheetSemEspaco(bloqueado) {
+  abrirSheet(`<h2>${bloqueado ? "Não consegui salvar" : "Sem espaço para salvar"}</h2>
+    <p class="muted">${bloqueado
+      ? "Este navegador está impedindo o app de guardar os dados (costuma ser aba anônima ou o visualizador de outro aplicativo). O que você digitou ainda está na tela — salve uma cópia agora para não perder."
+      : "O armazenamento do navegador encheu. Salve uma cópia agora e depois apague meses antigos."}</p>
+    <button class="btn pri" id="qe-exp" style="margin-top:12px">Salvar cópia agora</button>
+    <button class="btn ghost" id="qe-fechar" style="margin-top:8px">Fechar</button>`, (sh) => {
+    $("#qe-fechar", sh).addEventListener("click", fecharSheet);
+    $("#qe-exp", sh).addEventListener("click", () => { fecharSheet(); setTimeout(() => sheetTexto("Cópia dos seus dados", JSON.stringify(S), "Copie tudo e mande para você mesma no WhatsApp."), 250); });
+  });
+}
+
+async function compartilharResumo() {
+  const arr = doMes(mesSel);
+  const tot = totalDe(arr), pc = porCrianca(arr);
+  const cats = porCategoria(arr).slice(0, 6);
+  let t = `*Zuzugue — ${nomeMes(mesSel)}*\n\nTotal: *${brl(tot)}*\n`;
+  S.criancas.forEach(c => t += `${c.em} ${c.nome}: ${brl(pc[c.id])}\n`);
+  if (cats.length) { t += "\n_Por categoria_\n"; cats.forEach(x => t += `${x.cat.em} ${x.cat.nome}: ${brl(x.v)}\n`); }
+  t += `\n${arr.length} lançamentos`;
+  t = limpa(t);
+  try { if (navigator.share) { await navigator.share({ text: t }); return; } }
+  catch (e) { if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(t); toast("Resumo copiado ✓ cole no WhatsApp"); return; } catch (e) {}
+  sheetTexto("Resumo de " + nomeMes(mesSel), t, "Copie e cole onde quiser.");
+}
+
+/* ==========================================================================
+   TEMA, NAVEGAÇÃO E PARTIDA
+   ========================================================================== */
+/* "auto" só APAGA o data-theme quando ela mesma acabou de escolher: se a página
+   estiver aberta dentro de um visualizador que controla o tema, não brigamos com ele */
+function aplicaTema(escolhaDela) {
+  const t = S.config.tema || "auto";
+  if (t === "auto") { if (escolhaDela) document.documentElement.removeAttribute("data-theme"); }
+  else document.documentElement.setAttribute("data-theme", t);
+}
+
+$("#btn-tema").addEventListener("click", () => {
+  const ordem = ["auto", "light", "dark"];
+  S.config.tema = ordem[(ordem.indexOf(S.config.tema || "auto") + 1) % 3];
+  aplicaTema(true); salvar();
+  toast("Tema: " + ({ auto: "automático", light: "claro", dark: "escuro" })[S.config.tema]);
+});
+$("#mes-ant").addEventListener("click", () => { mesSel = somaMes(mesSel, -1); render(); });
+$("#mes-prox").addEventListener("click", () => { mesSel = somaMes(mesSel, 1); render(); });
+$("#mes-label").addEventListener("click", () => { if (mesSel !== mesHoje()) { mesSel = mesHoje(); render(); toast("Voltei para o mês atual"); } });
+$("#fab").addEventListener("click", () => abrirForm());
+$$(".tab").forEach(t => t.addEventListener("click", () => { aba = t.dataset.tab; filtro.texto = ""; render(); }));
+
+/* nunca deixar tela branca: se algo quebrar, o usuário ainda consegue tirar os dados */
+window.addEventListener("error", (ev) => {
+  console.error(ev.error || ev.message);
+  const v = document.getElementById("view");
+  if (v && !v.innerHTML) {
+    v.innerHTML = '<div class="card"><h2>Deu um problema na tela</h2><p class="muted">Seus dados continuam guardados no aparelho. Antes de qualquer coisa, salve uma cópia.</p></div>';
+    const b = el("button", "btn pri", "Copiar meus dados");
+    b.style.marginTop = "10px";
+    b.addEventListener("click", () => { try { sheetTexto("Cópia dos seus dados", localStorage.getItem(K.atual) || JSON.stringify(S), "Copie tudo e mande para você mesma no WhatsApp."); } catch (e) {} });
+    v.querySelector(".card").appendChild(b);
+  }
+});
+
+try {
+  carregar();
+  aplicaTema();
+  render();
+} catch (e) {
+  console.error(e);
+  document.getElementById("view").innerHTML =
+    '<div class="card"><h2>Não consegui abrir seus dados</h2><p class="muted">Nada foi apagado. Mostre esta tela para quem instalou o app.<br><br>' + esc(String(e && e.message || e)) + '</p></div>';
+}
+</script>
+
+<script>
+/* Guarda o app no próprio celular na primeira visita: depois disso ela abre
+   sem internet, igual ao arquivo. Se algo falhar, o app funciona do mesmo jeito. */
+var seguro = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+if ("serviceWorker" in navigator && seguro) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  });
+}
+</script>
+</html>
